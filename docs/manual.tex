@@ -1,0 +1,136 @@
+\documentclass{report}
+
+\begin{document}
+
+\chapter{License}
+
+MIT License
+
+Copyright (c) 2018 Ashley Poole
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the ``Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED ``AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+\chapter{Code Manifesto}
+
+This code (theta.py) is designed to take images of diffraction data and, using the geometrical conventions of the 'LP-Diffract' code written by Andrew Higginbotham, unwrap the images into theta-phi space.
+
+The code is also capable of compensating for sources of intensity attenuation as a function of gsqr and phi. The sources of attenuation considered are:
+\begin{itemize}
+\item Thomson polarisation factor
+\item filters placed in front of imaging media
+\item different path lengths of rays through the diffracted sample
+\end{itemize} 
+
+These intensity corrections allow the output to be used for intensity sensitive calculations, such as temperature measurement.
+
+\chapter{Setup and Metadata}
+
+\section{Libraries Used}
+
+\begin{itemize}
+\item Pillow 3.3.1
+\item numpy 1.11.1
+\item math 
+\item matplotlib 1.5.3
+\end{itemize}
+
+\chapter{Code Structure Overview}
+
+The code is composed of three different types of files. These are:
+\begin{itemize}
+\item input file
+\item spine file
+\item function files
+\end{itemize}
+
+The code works by first running the spine file `theta.py'. The spine file then reads in the input file `in\_theta.py' as python variables. The spine file then sequentially feeds these variables into the function files in the correct order. In other words, the spine file links all of the functions together, and brings the process from beginning to end.
+
+\textbf{From a users perspective, the only file that requires editing is the `in\_theta.py' input file.}  If the user wishes to modify the code, they are welcome to do so. 
+
+\chapter{Methods}
+
+\section{Overview}
+
+\subsection{Inputs}
+
+Instructions to the code are provided through the "in\_theta.py" file. Each of these values is read into the code as a python variable. The parameters are:
+
+\begin{itemize}
+\item \textbf{image\_filename} - a string containing the name of the image file to be read in. The image file should have single values for intensity at each point; RGB values are not supported. For the purposes of accurate intensity measurement, the code assumes the intensity values are given in PSL. 
+\item \textbf{source\_position}
+\end{itemize}
+
+\subsection{Outputs}
+
+\subsection{Method}
+
+The code has several distinct sections: calculate some common results needed for later functions; calculate $|G^2|$, phi, angles relevant to intensity corrections for each pixel in the image; apply intensity corrections due to filter attenuation and thomson polarisation; group pixels into bins of theta and phi; make plots, including integrated intensity across phi.
+The first section of code flows like this:
+
+\begin{itemize}
+\item Find the central pixel in the image.
+\item Determine the width and height of each pixel in mm.
+\item Renormalise the vectors view\_x and view\_y (the vectors which translate movement in x and y of the image into the `canonical' vector space). This renormalisation exists because sonOfHoward will sometimes give slightly wrong normalised vectors (eg. the vector (-0.01, 1.00, 0.00) might be given by sonOfHoward).
+\item  Convert the `offset' input variable to mm. The offset input variable tells us how many view\_x and view\_y we should move to get the image plate in the correct position.
+\item Calculate the adjustment required to move the position vector of each pixel from the top-left corner to the centre of the pixel.
+\item Create a vector from the origin (i.e. target position) to the centre of the central pixel, using the above adjustments for offset. By now, all inputs from sonOfHoward have been converted to mm. 
+\item Create a vector and unit vector from the source position to the origin. This is done by taking the negative of the input source position. 
+\item Define phi = 0 degrees. This is done by taking the normal of the plane containing the vector (0, 0, 1) and the vector from the origin to the centre of the image. 
+\end{itemize}
+
+The code has now formulated all of the components required to calculate $|G^2|$ and phi for each pixel. To calculate $|G^2|$ for each pixel:
+
+\begin{itemize}
+\item Calculate the vector and unit vector between the origin and the current pixel.
+\item Using the unit vector from origin to current pixel ($u$), and the unit vector from source to origin ($v$), calculate $G$ by the equation $G = \frac{u - v}{\lambda}$, where $\lambda$ is the wavelength of the x-rays given in the input file `in\_theta.py'.
+\item Convert $G$ into units of \AA$^{-1}$, by multiplying by the lattice constant of the probed material.
+\item Calculate the length of $G$ to get $|G|$, then square the result to get $|G^2|$.
+\end{itemize} 
+
+To calculate phi for each pixel:
+
+\begin{itemize}
+\item Calculate the normal to the plane containing the vector (0, 0, 1) and the vector between the origin and the current pixel. 
+\item Calculate the angle between the normal of the plane, and the normal of the plane previously defined to represent phi = 0. If the cross product of these vectors (in the same respective order) points in the (0, 0, 1) direction, the angle phi is said to be negative, and vice versa.
+\end{itemize}
+
+While looking at each pixel in an image, the code will also calculate the angles needed to compensate for filters and polarisation. For the filter correction, the angle $\alpha$ between the normal of the image plane and the vector connecting the origin to the current pixel is required. The filter correction proceeds like so:
+
+\begin{itemize}
+\item The attenuation length $\epsilon$ is defined such that $I = I_0 e^{-\frac{x}{\epsilon}}$. From this, the attenuation factor is defined as  $e^{-\frac{x}{\epsilon}}$. 
+\item $x$ is calculated by taking the thickness of the filter, and dividing by $cos(\alpha)$, to give an effective thickness.
+\item The inverse of the attenuation factor is multiplied by the intensity of each pixel so as to reproduce an approximation of the intensity, had the filters been absent.
+\end{itemize}
+
+After the filter correction is applied, the correction due to thomson polarisation must also be included. 
+
+\begin{itemize}
+\item The angle $\psi$, between the vector connecting the source to the origin and the vector connecting the origin to the current pixel, is calculated. 
+\item The correction to intensity due to this polarisation effect is given by $\frac{1 + cos^2(\psi)}{2}$. The intensity of each pixel is multiplied by the inverse of this value to eliminate this effect.
+\end{itemize}
+
+Once corrections to the intensity have been implemented, the pixels are then binned according to their $|G^2|$ and phi values. Once binned, a theta-phi image (technically, a $G^2$-phi image) is constructed. The intensities are then integrated over phi.
+
+\section{Detailed Structure of Functions}
+
+work\_out\_common\_results - This function works out results that don't need to be recalculated for each pixel of the image, but are necessary to calculations performed on each pixel. It's flow is: find image central pixel, calculate mm per pixel in both width and height, renormalise view\_x and view\_y numbers from LP-diffract, convert the `offset' input variable into mm, calculate the adjustment needed for a vector to point at the centre of a pixel rather than the top-left corner, calculate the vector connecting the origin to the pixel in the centre of the image, calculate the vector between the x-ray source and the origin, convert the soruce-origin vector to a unit vector.
+
+compensate\_for\_filters - 
+
+\end{document}
