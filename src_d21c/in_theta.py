@@ -1,6 +1,6 @@
 test_mode = True
 
-image_files = ['3x4_pixel_value_1.tif']  # "PSL_plate4_s10257_BBXRD.tif"#"3x3_white_test_image.tif"##"Nb_test_image.png"
+image_files = ['3x3_pixel_value_1.tif']  # "PSL_plate4_s10257_BBXRD.tif"#"3x3_white_test_image.tif"##"Nb_test_image.png"
 #  #"PSL_plate4_s10257_BBXRD.tif"#"Nb_test_image.png"#
 
 source_position = [[50.0, 0.0, 49.8]]  # In mm
@@ -36,8 +36,9 @@ phi_limit = [-180.0, 180.0]
 
 gsqr_limit = [0.0, 18.0]
 
-num_gsqr_bins = 3
-num_phi_bins = 3
+theta_phi_n_pixels_width = 1
+
+theta_phi_n_pixels_height = 1
 
 num_width_subpixels = 1
 num_height_subpixels = 1
@@ -48,6 +49,3 @@ debug = False
 
 name_plot_integrated_intensity = 'integrated_intensity_vs_gsqr.png'
 
-name_plot_master_normalised_gsqr_vs_phi = 'master_normalised_gsqr_vs_phi.tif'
-
-name_plot_master_preserved_gsqr_vs_phi = 'preserved_gsqr_vs_phi.tif'

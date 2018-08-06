@@ -37,8 +37,9 @@ phi_limit = [-180.0, 180.0]
 
 gsqr_limit = [0.0, 100.0]
 
-num_gsqr_bins = 3
-num_phi_bins = 3
+theta_phi_n_pixels_width = 3
+
+theta_phi_n_pixels_height = 3
 
 num_width_subpixels = 2
 num_height_subpixels = 2
@@ -48,6 +49,3 @@ plot = True
 debug = False
 
 name_plot_integrated_intensity = 'integrated_intensity_vs_gsqr.png'
-
-name_plot_master_normalised_gsqr_vs_phi = 'master_normalised_gsqr_vs_phi.tif'
-name_plot_master_preserved_gsqr_vs_phi = 'preserved_gsqr_vs_phi.tif'

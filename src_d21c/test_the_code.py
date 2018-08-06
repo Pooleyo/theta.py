@@ -1,6 +1,5 @@
 import theta
 
-
 def test_the_code():
 
     # This test will only work if test mode is enabled

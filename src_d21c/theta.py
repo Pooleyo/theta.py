@@ -19,12 +19,10 @@ import make_subpixels
 import define_phi_0
 import compensate_for_sample_attenuation
 import sort_data_files
-import compile_image_results
-import sort_master_files
 
 # These modules are standard python modules.
 import matplotlib.pyplot as plt
-import copy
+import numpy as np
 
 # This segment determines whether or not test mode is enabled.
 
@@ -35,6 +33,7 @@ if test_mode is False:
 
 elif test_mode is True:
     import test_in_theta as ip
+
 
 
 def main():
@@ -53,12 +52,6 @@ def main():
     all_thomson_attenuation_correction_lists = []
     all_final_pixel_values_lists = []
     all_image_bin_lists = []
-
-    # The bins must be defined before the images are looped over. This is because the bins must be consistent between
-    # different images.
-    template_gsqr_bin_list, template_phi_bin_list, template_image_bin_list = \
-        make_bins_for_theta_phi.run(
-            ip.num_gsqr_bins, ip.num_phi_bins, ip.gsqr_limit, ip.phi_limit, ip.debug)
 
     for i in range(len(ip.image_files)):
 
@@ -95,15 +88,14 @@ def main():
                 unit_vector_source_to_origin, adjust_to_centre_of_pixel, unit_phi_plane_normal, phi_0_vector, ip.debug)
 
         ##########################################
-        # The following functions apply corrections for thomson polarisation, filter attenuation, and the sample
-        #  absorption.
+        # The following functions apply corrections for thomson polarisation, filter attenuation, and the sample absorption.
 
         pixel_value, filter_attenuation_correction_factor_list = \
             compensate_for_filters.run(
                 filter_angles_list_deg, pixel_value, ip.filter_attenuation_length[i], ip.filter_thickness[i], ip.debug)
 
-        # The thomson_angles_list_deg is the angle from source -> origin -> pixel, and is the same list of angles
-        #  required by the sample attenuation correction.
+        # The thomson_angles_list_deg is the angle from source -> origin -> pixel, and is the same list of angles required by
+        # the sample attenuation correction.
         pixel_value, sample_attenuation_correction_factor_list = \
             compensate_for_sample_attenuation.run(
                 thomson_angles_list_deg, pixel_value, ip.source_position[i], ip.sample_normal[i])
@@ -139,9 +131,9 @@ def main():
         ############################################
         # This section bins the pixels according to their gsqr-phi values calculated above.
 
-        gsqr_bin_list = copy.deepcopy(template_gsqr_bin_list)
-        phi_bin_list = copy.deepcopy(template_phi_bin_list)
-        image_bin_list = copy.deepcopy(template_image_bin_list)
+        gsqr_bin_list, phi_bin_list, image_bin_list = \
+            make_bins_for_theta_phi.run(
+                ip.theta_phi_n_pixels_width, ip.theta_phi_n_pixels_height, gsqr, phi, ip.debug)
 
         image_bin_list = \
             populate_theta_phi_bins.run(
@@ -162,18 +154,16 @@ def main():
             "integrated_intensity_vs_gsqr.dat", gsqr_bin_list, gsqr_integrated_intensity, ip.debug)
 
         build_theta_phi_image.run(
-            'normalised_gsqr_vs_phi.tif', image_bin_list, ip.num_gsqr_bins, ip.num_phi_bins,
+            'normalised_gsqr_vs_phi.tif', image_bin_list, ip.theta_phi_n_pixels_width, ip.theta_phi_n_pixels_height,
             gsqr_bin_list, phi_bin_list, True, ip.debug)
 
         build_theta_phi_image.run(
-            'preserved_gsqr_vs_phi.tif', image_bin_list, ip.num_gsqr_bins, ip.num_phi_bins,
+            'preserved_gsqr_vs_phi.tif', image_bin_list, ip.theta_phi_n_pixels_width, ip.theta_phi_n_pixels_height,
             gsqr_bin_list, phi_bin_list, False, ip.debug)
 
         check_image_total_pixel_value.run(
             initial_total_pixel_value, 'preserved_gsqr_vs_phi.tif', ip.debug)
 
-
-        # TODO Turn this into a function
         if ip.plot is True:
             plt.scatter(gsqr, pixel_value, 1)
             plt.xlabel("$G^2$")
@@ -185,32 +175,8 @@ def main():
         all_initial_pixel_value_lists.append(initial_pixel_values)
         all_subpixel_lists.append(subpixel_list)
         all_filter_attenuation_correction_lists.append(filter_attenuation_correction_factor_list)
-        all_sample_attenuation_correction_lists.append(sample_attenuation_correction_factor_list)
-        all_thomson_attenuation_correction_lists.append(thomson_attenuation_correction_factor_list)
-        all_final_pixel_values_lists.append(pixel_value)
-        all_image_bin_lists.append(image_bin_list)
 
         print "Finished with " + ip.image_files[i] + "\n"
-
-    master_bin_list = copy.deepcopy(template_image_bin_list)
-
-    master_bin_list = compile_image_results.run(master_bin_list, all_image_bin_lists)
-
-    build_theta_phi_image.run(
-        ip.name_plot_master_normalised_gsqr_vs_phi, master_bin_list, ip.num_gsqr_bins, ip.num_phi_bins,
-        gsqr_bin_list, phi_bin_list, True, ip.debug)
-
-    build_theta_phi_image.run(
-        ip.name_plot_master_preserved_gsqr_vs_phi, master_bin_list, ip.num_gsqr_bins, ip.num_phi_bins,
-        gsqr_bin_list, phi_bin_list, False, ip.debug)
-
-    # TODO put a function here that plots integrated_intensity vs gsqr
-
-    # TODO find a way of normalising intensity wrt phi
-
-    plot_names = [ip.name_plot_master_normalised_gsqr_vs_phi, ip.name_plot_master_preserved_gsqr_vs_phi]
-
-    sort_master_files.run(plot_names)
 
     return all_initial_pixel_value_lists, all_subpixel_lists, all_filter_attenuation_correction_lists
 
