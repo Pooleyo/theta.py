@@ -1,6 +1,7 @@
 def run(gsqr, phi, pixel_value, gsqr_bin_size, phi_bin_size):
         
     import math
+    import PIL
     import numpy as np
     from PIL import Image 
    

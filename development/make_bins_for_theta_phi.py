@@ -1,46 +1,27 @@
-def run(num_gsqr_bins, num_phi_bins, gsqr, phi, debug):
+def run(im, gsqr, phi):
 
-    import numpy as np   
+    import numpy as np
+
+    gsqr_diff = max(gsqr) - min(gsqr)
+    width = im.size[0]
     
-    
-    print "Making bins for theta-phi sorting..."
+    width_bin_size = gsqr_diff / width
+    phi_diff = max(phi) - min(phi)
+
+    height = im.size[1]
+
+    height_bin_size = phi_diff / height    
     
     new_image_bins = []# This list will contain the theta_phi images' gsqr value at [0], phi value at [1], a list of pixel indices falling into this bin at [2], and the sum of the pixel values currently in this bin at [3].
     
-    gsqr_range = np.linspace(min(gsqr), max(gsqr), num_gsqr_bins)
+    gsqr_range = np.linspace(min(gsqr), max(gsqr), width)
     
-    phi_range = np.linspace(min(phi), max(phi), num_phi_bins)
+    phi_range = np.linspace(min(phi), max(phi), height)
 
+    for i in range(len(gsqr_range)):
+        for j in range(len(phi_range)):
 
-    for i in gsqr_range:
-    
-        for j in phi_range:
-
-            current_list_value = [i, j, [], [0]]
-
+            current_list_value = [gsqr_range[i], phi_range[j], [], [0]]
             new_image_bins.append(current_list_value)
 
-
-    
-    debug_message = ("\n\n~~~~~~~~~~~~~\nFILENAME = " + __name__ + ".py"
-    
-    + "\n\nINPUTS:"
-    + "\nnum_gsqr_bins = " + str(num_gsqr_bins)
-    + "\nnum_phi_bins = " + str(num_phi_bins)
-    + "\ngsqr = " + str(gsqr)
-    + "\nphi = " + str(phi)
-    
-    + "\n\nOUTPUTS:"
-    + "\ngsqr_range = " + str(gsqr_range)
-    + "\nphi_range = " + str(phi_range)
-    + "\nnew_image_bins = " + str(new_image_bins)
-    
-    + "\n~~~~~~~~~~~~~~~")
-    
-    
-    if debug:
-    
-        print debug_message
-
-
-    return gsqr_range, phi_range, new_image_bins
+    return gsqr_range, phi_range, new_image_bins, width, height

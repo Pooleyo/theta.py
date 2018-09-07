@@ -1,64 +1,31 @@
-def run(filename, image_bin_list, width, height, gsqr_bin_list, phi_bin_list, normalisation, debug):
+def run(image_bin_list, image, gsqr_bin_list, phi_bin_list):
+
+    print "Building theta-phi image..."
     
-    import numpy as np
-    from PIL import Image
-
-
     new_pixel_values = []
-
     
     for i in image_bin_list:
         new_pixel_values.append(i[3])
+        
     
-        
-    if normalisation:
-        normalisation_constant = max(new_pixel_values)/float(255)
-
-    elif not normalisation:
-        normalisation_constant = 1.0
-        
-    else:
-        print "Invalid value for 'normalisation';\n'normalisation' is of type 'bool'"
-        normalisation_constant = False
-
+    normalisation_constant = max(new_pixel_values)/float(255)
 
     for i in range(len(new_pixel_values)):
-        # The pixel value is now normalised according to our normalising condition declared above.
-        # If no normalisation is wanted, the normalisation_constant is set to 1.        
+        
         new_pixel_values[i] = new_pixel_values[i]/normalisation_constant
-
-    image_array = np.asarray(new_pixel_values).reshape(height, width, order="F")
-
-    image = Image.fromarray(image_array)
     
-    image.save(filename)
-    image.close()
-    
+    for i in range(len(new_pixel_values)):
+
+        new_pixel_values[i] = int(abs(new_pixel_values[i] - 255))
+
     
         
-    debug_message = ("\n\n~~~~~~~~~~~~~\nFILENAME = " + __name__ + ".py"
-    
-    + "\n\nINPUTS:"
-    + "\nfilename = " + str(filename)
-    + "\nimage_bin_list = " + str(image_bin_list)
-    + "\nwidth = " + str(width)
-    + "\nheight = " + str(height)
-    + "\ngsqr_bin_list = " + str(gsqr_bin_list)
-    + "\nphi_bin_list = " + str(phi_bin_list)
-    + "\nnormalisation = " + str(normalisation)
-    + "\ndebug = " + str(debug)
-  
-    + "\n\nOUTPUTS:"
-    + "\nnew_pixel_values = " + str(new_pixel_values)
-    + "\n~~~~~~~~~~~~~~~")
-    
-    
-    if debug:
-    
-        print debug_message
-    
 
-    
-    
-    return new_pixel_values
+    image_pixels = image.load()
+    for i in range(len(gsqr_bin_list)):
+        for j in range(len(phi_bin_list)):
+            current_pixel_index = i * len(phi_bin_list) + j
+            image_pixels[i,j] = (new_pixel_values[current_pixel_index])
+     
+    return image
     

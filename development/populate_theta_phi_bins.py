@@ -1,4 +1,4 @@
-def run(gsqr, phi, pixel_value, gsqr_bins, phi_bins, image_bins, debug):
+def run(gsqr, phi, pixel_value, gsqr_bins, phi_bins, image_bins, gsqr_bin_width, phi_bin_height):
 
     import numpy as np   
 
@@ -18,30 +18,6 @@ def run(gsqr, phi, pixel_value, gsqr_bins, phi_bins, image_bins, debug):
         bin_index = (gsqr_bin_index * len(phi_bins)) + phi_bin_index
         
         image_bins[bin_index][2].append(i)
-
-        
-
-    debug_message = ("\n\n~~~~~~~~~~~~~\nFILENAME = " + __name__ + ".py"
-    
-    + "\n\nINPUTS:"
-    + "\ngsqr = " + str(gsqr)
-    + "\nphi = " + str(phi)
-    + "\npixel_value = " + str(pixel_value)
-    + "\ngsqr_bins = " + str(gsqr_bins)
-    + "\nphi_bins = " + str(phi_bins)
-    + "\nimage_bins = " + str(image_bins)
-    + "\ndebug = " + str(debug)
-  
-    + "\n\nOUTPUTS:"
-    + "\nimage_bins = " + str(image_bins)
-    + "\n~~~~~~~~~~~~~~~")
-    
-    
-    if debug:
-    
-        print debug_message
-
-
 
                 
     return image_bins
