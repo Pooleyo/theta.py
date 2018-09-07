@@ -1,5 +1,0 @@
-[
-  "test_the_code.py::test_the_code", 
-  "test_units.py::test_calc_angle_between_vectors", 
-  "test_units.py::test_give_phi_sign"
-]

@@ -1,0 +1,5 @@
+{
+  "test_the_code.py::test_the_code": true, 
+  "test_units.py::test_calc_theta_phi": true, 
+  "test_units.py::test_compensate_for_sample_attenuation": true
+}

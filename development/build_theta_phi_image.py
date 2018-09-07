@@ -3,36 +3,38 @@ def run(filename, image_bin_list, width, height, gsqr_bin_list, phi_bin_list, no
     import numpy as np
     from PIL import Image
 
+
     new_pixel_values = []
 
+    
     for i in image_bin_list:
-
         new_pixel_values.append(i[3])
-
-    if normalisation is True:
-
+    
+        
+    if normalisation:
         normalisation_constant = max(new_pixel_values)/float(255)
 
-        for i in range(len(new_pixel_values)):
-            # The pixel value is now normalised according to our normalising condition declared above.
-            # If no normalisation is wanted, the normalisation_constant is set to 1.
-            new_pixel_values[i] = new_pixel_values[i]/normalisation_constant
-
-    elif normalisation is False:
-
-        pass
-
+    elif not normalisation:
+        normalisation_constant = 1.0
+        
     else:
-
         print "Invalid value for 'normalisation';\n'normalisation' is of type 'bool'"
+        normalisation_constant = False
+
+
+    for i in range(len(new_pixel_values)):
+        # The pixel value is now normalised according to our normalising condition declared above.
+        # If no normalisation is wanted, the normalisation_constant is set to 1.        
+        new_pixel_values[i] = new_pixel_values[i]/normalisation_constant
 
     image_array = np.asarray(new_pixel_values).reshape(height, width, order="F")
 
     image = Image.fromarray(image_array)
     
     image.save(filename)
-
     image.close()
+    
+    
         
     debug_message = ("\n\n~~~~~~~~~~~~~\nFILENAME = " + __name__ + ".py"
     
@@ -49,10 +51,14 @@ def run(filename, image_bin_list, width, height, gsqr_bin_list, phi_bin_list, no
     + "\n\nOUTPUTS:"
     + "\nnew_pixel_values = " + str(new_pixel_values)
     + "\n~~~~~~~~~~~~~~~")
-
+    
+    
     if debug:
     
         print debug_message
+    
 
+    
+    
     return new_pixel_values
     

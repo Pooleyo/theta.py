@@ -1,0 +1,7 @@
+[
+  "test_units.py::test_calc_angle_between_vectors", 
+  "test_units.py::test_calc_integrated_intensity_per_phi", 
+  "test_units.py::test_calc_phi_deg", 
+  "test_units.py::test_calc_plane_from_two_vectors", 
+  "test_units.py::test_give_phi_sign"
+]
