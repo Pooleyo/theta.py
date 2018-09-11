@@ -32,7 +32,7 @@ def run(filter_angles_list_deg, pixel_value, filter_attenuation_length_at_90_deg
     debug_message = ("\n\n~~~~~~~~~~~~~\nFILENAME = " + __name__ + ".py"
     
     + "\n\nINPUTS:"
-    + "\nfilter_angles_list_deg = " + str(filter_angles_list_deg)
+    + "\nfilter_angles_deg = " + str(filter_angles_list_deg)
     + "\npixel_value = " + str(pixel_value)
     + "\nfilter_attenuation_length_at_90_deg = " + str(filter_attenuation_length_at_90_deg)
     + "\nfilter_thickness = " + str(filter_thickness)

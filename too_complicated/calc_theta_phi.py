@@ -93,7 +93,7 @@ def run(width, height, pix, phi_limit, gsqr_limit, wavelength, a_lattice, normal
     + "\ndebug = " + str(debug)
     
     + "\n\nOUTPUTS:"
-    + "\nfilter_angles_list_deg = " + str(filter_angles_list_deg)
+    + "\nfilter_angles_deg = " + str(filter_angles_list_deg)
     + "\nthomson_angles_list_deg = " + str(thomson_angles_list_deg)
     + "\ngsqr = " + str(gsqr)
     + "\npixel_value = " + str(pixel_value)

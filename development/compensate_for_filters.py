@@ -1,18 +1,26 @@
-def run(filter_angles_list_deg, pixel_value, filter_attenuation_length_at_90_deg, filter_thickness):
+def run(height, width, filter_angles_list_deg, pixel_value, filter_attenuation_length_at_90_deg, filter_thickness,
+        attenuation_correction, pixel_value_corrected_for_attenuation):
 
     import numpy as np
-    import math
 
     print "Compensating for filters..."
 
-    for i in range(len(filter_attenuation_length_at_90_deg)):
-        number_of_attenuation_lengths = filter_thickness[i]/filter_attenuation_length_at_90_deg[i]
-        attenuation_factor_at_90_deg =  number_of_attenuation_lengths * (1 - 1/math.e) # This number represents the fraction of intensity absorbed by the filter at this angle.
-         
-        
-        for j in range(len(pixel_value)):            
-            effective_attenuation_factor = attenuation_factor_at_90_deg / np.cos(np.deg2rad(filter_angles_list_deg[j])) # This corrects for the angle of incidence of the scattered x-rays upon the filter, by looking at the effective thickness of the filter at the present angle.
+    for i in range(height):
 
-            pixel_value[j] = pixel_value[j] * (1.0/(1.0 - effective_attenuation_factor))
-            
-    return pixel_value
+        for j in range(width):
+
+            effective_path_length = filter_thickness / np.cos(np.deg2rad(filter_angles_list_deg[i][j]))  # By taking the
+            # angle of incidence into account we can calculate an effective thickness of the filter at this incidence
+            # angle.
+
+            attenuation_factor = np.exp(- effective_path_length / filter_attenuation_length_at_90_deg)  # By
+            # following the equation: I = I_0 * e^(- path_length / attenuation_length)
+
+            correction_factor = 1.0 / attenuation_factor
+
+            pixel_value_corrected_for_attenuation[i][j] = pixel_value[i][j] * correction_factor  # We multiply by the reciprocal of the
+            #  attenuation to revert to the original intensity.
+
+            attenuation_correction[i][j] = correction_factor
+
+    return pixel_value_corrected_for_attenuation, attenuation_correction
