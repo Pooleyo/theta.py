@@ -49,8 +49,8 @@ def run(width, height, pix, phi_limit, gsqr_limit, wavelength, a_lattice, normal
     debug_message = ("\n\n~~~~~~~~~~~~~\nFILENAME = " + __name__ + ".py"
     
     + "\n\nINPUTS:"
-    + "\nwidth = " + str(width)
-    + "\nheight = " + str(height)
+    + "\nworking_width = " + str(width)
+    + "\nworking_height = " + str(height)
     + "\npix = " + str(pix)
     + "\nphi_limit = " + str(phi_limit)
     + "\ngsqr_limit = " + str(gsqr_limit)
@@ -73,7 +73,7 @@ def run(width, height, pix, phi_limit, gsqr_limit, wavelength, a_lattice, normal
     + "\nfilter_angles_deg = " + str(filter_angles_list_deg)
     + "\nthomson_angles_list_deg = " + str(thomson_angles_list_deg)
     + "\ngsqr = " + str(gsqr)
-    + "\npixel_value = " + str(pixel_value)
+    + "\nraw_pixel_value = " + str(pixel_value)
     + "\nphi = " + str(phi)
     + "\n~~~~~~~~~~~~~~~")
 

@@ -74,9 +74,9 @@ def main():
 
         subpixel_list = []
         """
-        pix, subpixel_list, width, height = \
+        pix, subpixel_list, working_width, working_height = \
             make_subpixels.run(
-                pix, width, height, ip.num_width_subpixels, ip.num_height_subpixels, ip.debug)
+                pix, working_width, working_height, ip.num_width_subpixels, ip.num_height_subpixels, ip.debug)
         """
         central_pixel, width_mm_per_pixel, height_mm_per_pixel, norm_view_x, norm_view_y, \
         vector_origin_to_central_pixel, unit_vector_source_to_origin, adjust_to_centre_of_pixel = \

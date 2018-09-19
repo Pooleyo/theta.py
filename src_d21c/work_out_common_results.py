@@ -56,8 +56,8 @@ def run(width, height, x_scale, y_scale, view_x, view_y, offset, normal, source_
     debug_message = ("\n\n~~~~~~~~~~~~~\nFILENAME = " + __name__ + ".py"
     
     + "\n\nINPUTS:"
-    + "\nwidth = " + str(width)
-    + "\nheight = " + str(height)
+    + "\nworking_width = " + str(width)
+    + "\nworking_height = " + str(height)
     + "\nx_scale = " + str(x_scale)
     + "\ny_scale = " + str(y_scale)
     + "\nview_x = " + str(view_x)

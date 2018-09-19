@@ -26,7 +26,7 @@ def run(gsqr, phi, pixel_value, gsqr_bins, phi_bins, image_bins, debug):
     + "\n\nINPUTS:"
     + "\ngsqr = " + str(gsqr)
     + "\nphi = " + str(phi)
-    + "\npixel_value = " + str(pixel_value)
+    + "\nraw_pixel_value = " + str(pixel_value)
     + "\ngsqr_bins = " + str(gsqr_bins)
     + "\nphi_bins = " + str(phi_bins)
     + "\nimage_bins = " + str(image_bins)

@@ -133,7 +133,7 @@ def main():
 
         gsqr_bin_list, phi_bin_list, image_bin_list = \
             make_bins_for_theta_phi.run(
-                ip.theta_phi_n_pixels_width, ip.theta_phi_n_pixels_height, gsqr, phi, ip.debug)
+                ip.num_gsqr_bins, ip.num_phi_bins, gsqr, phi, ip.debug)
 
         image_bin_list = \
             populate_theta_phi_bins.run(
@@ -154,11 +154,11 @@ def main():
             "integrated_intensity_vs_gsqr.dat", gsqr_bin_list, gsqr_integrated_intensity, ip.debug)
 
         build_theta_phi_image.run(
-            'normalised_gsqr_vs_phi.tif', image_bin_list, ip.theta_phi_n_pixels_width, ip.theta_phi_n_pixels_height,
+            'normalised_gsqr_vs_phi.tif', image_bin_list, ip.num_gsqr_bins, ip.num_phi_bins,
             gsqr_bin_list, phi_bin_list, True, ip.debug)
 
         build_theta_phi_image.run(
-            'preserved_gsqr_vs_phi.tif', image_bin_list, ip.theta_phi_n_pixels_width, ip.theta_phi_n_pixels_height,
+            'preserved_gsqr_vs_phi.tif', image_bin_list, ip.num_gsqr_bins, ip.num_phi_bins,
             gsqr_bin_list, phi_bin_list, False, ip.debug)
 
         check_image_total_pixel_value.run(

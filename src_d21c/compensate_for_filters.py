@@ -33,13 +33,13 @@ def run(filter_angles_list_deg, pixel_value, filter_attenuation_length_at_90_deg
     
     + "\n\nINPUTS:"
     + "\nfilter_angles_deg = " + str(filter_angles_list_deg)
-    + "\npixel_value = " + str(pixel_value)
+    + "\nraw_pixel_value = " + str(pixel_value)
     + "\nfilter_attenuation_length_at_90_deg = " + str(filter_attenuation_length_at_90_deg)
     + "\nfilter_thickness = " + str(filter_thickness)
     + "\ndebug = " + str(debug)
   
     + "\n\nOUTPUTS:"
-    + "\npixel_value = " + str(pixel_value)
+    + "\nraw_pixel_value = " + str(pixel_value)
     + "\nattenuation_correction_list = " + str(attenuation_correction_list)
     + "\n~~~~~~~~~~~~~~~")
 

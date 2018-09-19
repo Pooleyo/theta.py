@@ -70,7 +70,7 @@ for i in range(width):
 
 pixel_value = compensate_for_filters.run(filter_angles_list_deg, pixel_value, ip.filter_attenuation_length, ip.filter_thickness)
 
-im_theta_phi = build_image_skeleton.run(ip.theta_phi_n_pixels_width, ip.theta_phi_n_pixels_height)
+im_theta_phi = build_image_skeleton.run(ip.num_gsqr_bins, ip.num_phi_bins)
 
 gsqr_bin_list, phi_bin_list, image_bin_list, gsqr_bin_width, phi_bin_height = make_bins_for_theta_phi.run(im_theta_phi, gsqr, phi)
 

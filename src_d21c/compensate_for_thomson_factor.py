@@ -38,7 +38,7 @@ def run(angles_deg, pixel_value, debug):
     
     + "\n\nINPUTS:"
     + "\nangles_deg = " + str(angles_deg)
-    + "\npixel_value = " + str(pixel_value)
+    + "\nraw_pixel_value = " + str(pixel_value)
     + "\ndebug = " + str(debug)
   
     + "\n\nOUTPUTS:"

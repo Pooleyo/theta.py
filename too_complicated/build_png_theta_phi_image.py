@@ -42,8 +42,8 @@ def run(filename, image_bin_list, width, height, gsqr_bin_list, phi_bin_list, no
                      + "\n\nINPUTS:"
                      + "\nfilename = " + str(filename)
                      + "\nimage_bin_list = " + str(image_bin_list)
-                     + "\nwidth = " + str(width)
-                     + "\nheight = " + str(height)
+                     + "\nworking_width = " + str(width)
+                     + "\nworking_height = " + str(height)
                      + "\ngsqr_bin_list = " + str(gsqr_bin_list)
                      + "\nphi_bin_list = " + str(phi_bin_list)
                      + "\nnormalisation = " + str(normalisation)

@@ -1,29 +1,32 @@
-forward_scatter_filename = "PSL_plate_4_s10268_BBXRD.tif" #"3x3_white_test_image.tif"
+forward_scatter_filename = "3x4_pixel_value_1.tif" #"PSL_plate_4_s10268_BBXRD.tif" #
 
 
-source_position = [50.0,0.0,50.0] # In mm
-offset = [0,11,270] # X offset (mm), Y offset (mm), rotation (degrees)
+source_position = [50.0,0.0,50.0]  # In mm
+offset = [0,11,270]  # X offset (mm), Y offset (mm), rotation (degrees)
 
-normal = [-23.5, 0.0, 12.3] # The normal to the plane of the image plate with units mm.
+normal = [-23.5, 0.0, 12.3]  # The normal to the plane of the image plate with units mm.
 
-x_scale = 56 # In mm
-y_scale = 44 # In mm
+x_scale = 56  # In mm
+y_scale = 44  # In mm
 
-view_x = [0.0, 1.0, -0.00] # "normalised"
-view_y = [0.46, 0.00, 0.89] # "normalised"
+view_x = [0.0, 1.0, 0.00]  # "normalised"
+view_y = [0.46, 0.00, 0.89]  # "normalised"
 
 
-wavelength = 1.851 # In Angstroms
-a_lattice = 3.3 # In Angstroms
+wavelength = 1.851  # In Angstroms
+a_lattice = 3.3  # In Angstroms
 
+correct_for_filter_attenuation = True
 filter_thickness = 10.0  # [10.0, 6.0]
-filter_attenuation_length_at_90_deg = 34.1 # [34.1, 109.7] # The attenuation length(s) of filter(s) used, in microns. Enter a new list element for each filter; the order doesn't matter. Zn, at 9 keV, has attenuation length of 34.1 microns. Al, at 9 keV, has attenuation length of 109.7 microns.
+filter_attenuation_length_at_90_deg = 34.1  # [34.1, 109.7] # The attenuation length(s) of filter(s) used, in microns.
+# Enter a new list element for each filter; the order doesn't matter. Zn, at 9 keV, has attenuation length of 34.1
+# microns. Al, at 9 keV, has attenuation length of 109.7 microns.
 
-gsqr_limit = [0.0, 20.0]
-phi_limit = [-180.0, 180.0]
+gsqr_limit = [0.6, 10.6]
+phi_limit = [-60.0, 60.0]
 
-theta_phi_n_pixels_width = 100
-theta_phi_n_pixels_height = 30
+num_gsqr_bins = 100
+num_phi_bins = 30
 
 plot = True
 debug = False

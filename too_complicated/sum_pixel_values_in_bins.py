@@ -17,7 +17,7 @@ def run(image_bin_list, pixel_value, debug):
     
     + "\n\nINPUTS:"
     + "\nimage_bin_list = " + str(image_bin_list)
-    + "\npixel_value = " + str(pixel_value)
+    + "\nraw_pixel_value = " + str(pixel_value)
     + "\ndebug = " + str(debug)
   
     + "\n\nOUTPUTS:"

@@ -31,8 +31,8 @@ def run(image_filename, debug, i):
     
     + "\n\nOUTPUTS:"
     + "\nim = " + str(im)
-    + "\nwidth = " + str(width)
-    + "\nheight = " + str(height)
+    + "\nworking_width = " + str(width)
+    + "\nworking_height = " + str(height)
     + "\npix = " + str(pix)
     + "\ntotal_pixel_value = " + str(total_pixel_value)
     

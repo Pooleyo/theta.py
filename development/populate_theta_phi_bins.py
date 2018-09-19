@@ -1,23 +1,27 @@
-def run(gsqr, phi, pixel_value, gsqr_bins, phi_bins, image_bins, gsqr_bin_width, phi_bin_height):
+def run(working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter, working_pixel_value):
 
     import numpy as np   
 
-    print "Populating theta and phi bins..."
+    print "Populating G^2 and phi bins..."
 
-    for i in range(len(pixel_value)):
-        gsqr_diff = []    
-        for j in gsqr_bins:
-            gsqr_diff.append(abs(gsqr[i] - j))
-        gsqr_bin_index = np.argmin(gsqr_diff)    
-        
-        phi_diff = []
-        for j in phi_bins:
-            phi_diff.append(abs(phi[i] - j))
-        phi_bin_index = np.argmin(phi_diff)      
+    for pixel_row in range(working_height):
 
-        bin_index = (gsqr_bin_index * len(phi_bins)) + phi_bin_index
-        
-        image_bins[bin_index][2].append(i)
+        for pixel_col in range(working_width):
 
-                
-    return image_bins
+            current_gsqr = gsqr[pixel_row, pixel_col]
+
+            gsqr_subtract = abs(gsqr_bins - current_gsqr)
+
+            bin_col = np.argmin(gsqr_subtract)
+
+            current_phi = phi[pixel_row, pixel_col]
+
+            phi_subtract = abs(phi_bins - current_phi)
+
+            bin_row = np.argmin(phi_subtract)
+
+            gsqr_phi_bins[bin_row, bin_col] += working_pixel_value[pixel_row, pixel_col]
+
+            gsqr_phi_bin_pixel_counter[bin_row, bin_col] += 1
+
+    return gsqr_phi_bins, gsqr_phi_bin_pixel_counter

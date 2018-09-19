@@ -29,8 +29,8 @@ def run(filename, colour_label, pixel_list, width, height, colour_map_limits, de
     + "\nfilename = " + str(filename)
     + "\ncolour_label = " + str(colour_label)
     + "\npixel_list = " + str(pixel_list)
-    + "\nwidth = " + str(width)
-    + "\nheight = " + str(height)
+    + "\nworking_width = " + str(width)
+    + "\nworking_height = " + str(height)
     + "\ncolour_map_limits = " + str(colour_map_limits) 
     + "\ndebug = " + str(debug)
     
