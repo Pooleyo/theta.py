@@ -1,8 +1,9 @@
-forward_scatter_filename = "3x4_pixel_value_1.tif" #"PSL_plate_4_s10268_BBXRD.tif" #
-
+forward_scatter_filename = "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"  "3x4_pixel_value_1.tif" #
 
 source_position = [50.0,0.0,50.0]  # In mm
 offset = [0,11,270]  # X offset (mm), Y offset (mm), rotation (degrees)
+sample_normal = [0.0, 0.0, 1.0]
+
 
 normal = [-23.5, 0.0, 12.3]  # The normal to the plane of the image plate with units mm.
 
@@ -22,11 +23,14 @@ filter_attenuation_length_at_90_deg = 34.1  # [34.1, 109.7] # The attenuation le
 # Enter a new list element for each filter; the order doesn't matter. Zn, at 9 keV, has attenuation length of 34.1
 # microns. Al, at 9 keV, has attenuation length of 109.7 microns.
 
-gsqr_limit = [0.6, 10.6]
+correct_for_sample_attenuation = True
+sample_attenuation_length_90_deg = 8
+
+gsqr_limit = [2.6, 10.6]
 phi_limit = [-60.0, 60.0]
 
-num_gsqr_bins = 100
-num_phi_bins = 30
+num_gsqr_bins = 200
+num_phi_bins = 100
 
 plot = True
 debug = False

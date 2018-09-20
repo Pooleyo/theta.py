@@ -12,6 +12,7 @@ import compensate_for_filters
 import integrate_along_phi
 import make_simple_plot
 import write_data_to_file
+import compensate_for_sample_attenuation
 
 import numpy as np
 from skimage import io
@@ -31,6 +32,8 @@ gsqr = np.empty((working_height, working_width))
 phi = np.empty((working_height, working_width))
 attenuation_correction = np.empty((working_height, working_width))
 pixel_value_corrected_for_attenuation = np.empty((working_height, working_width))
+
+vector_origin_to_pixels = [int(0)] * working_height * working_width
 
 ########################################################################################################################
 # The following section assigns gsqr and phi values to each of the pixels.
@@ -68,19 +71,20 @@ for i in range(working_height):
             filter_angles_deg[i][j] = abs(current_filter_angle_deg)
             gsqr[i][j] = current_gsqr
             phi[i][j] = current_phi_deg
+            vector_origin_to_pixels[(i * working_width) + j] = vector_origin_to_current_pixel
 
         else:
 
             continue
-
-########################################################################################################################
-# The following section applies a correction to the intensity for each pixel due to attenuation by any filters.
 
 make_image_from_array.run(gsqr,"gsqr_map.png","viridis","none")
 
 make_image_from_array.run(phi,"phi_map.png","viridis","none")
 
 make_image_from_array.run(filter_angles_deg, "filter_angle_map.png", "viridis", "none")
+
+########################################################################################################################
+# The following section applies a correction to the intensity for each pixel due to attenuation by any filters.
 
 if ip.correct_for_filter_attenuation is True:
 
@@ -89,6 +93,18 @@ if ip.correct_for_filter_attenuation is True:
         ip.filter_thickness, attenuation_correction, pixel_value_corrected_for_attenuation)
 
     working_pixel_value = pixel_value_corrected_for_attenuation
+
+########################################################################################################################
+# The following section applies a correction to the intensity for each pixel due to sample attenuation.
+
+if ip.correct_for_sample_attenuation is True:
+
+    pixel_value_corrected_for_sample_attenuation, sample_attenuation_correction = compensate_for_sample_attenuation.run(
+        working_pixel_value, ip.sample_normal, ip.source_position, vector_origin_to_pixels)
+
+    working_pixel_value = pixel_value_corrected_for_sample_attenuation
+
+make_image_from_array.run(sample_attenuation_correction, "sample_attenuation_correction_map.png", "viridis", "none")
 
 ########################################################################################################################
 # The following section sorts the pixels from the original image into bins according to the gsqr and phi values
@@ -101,7 +117,7 @@ gsqr_phi_bins, gsqr_phi_bin_pixel_counter = populate_theta_phi_bins.run(
     working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter,
     working_pixel_value)
 
-make_image_from_array.run(gsqr_phi_bins, "phi_vs_gsqr.png", "gray", "none")
+make_image_from_array.run(gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none")
 
 ########################################################################################################################
 # The following section integrates along phi.
