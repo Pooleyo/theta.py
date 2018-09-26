@@ -13,6 +13,7 @@ import integrate_along_phi
 import make_simple_plot
 import write_data_to_file
 import compensate_for_sample_attenuation
+import compensate_for_polarisation
 
 import numpy as np
 from skimage import io
@@ -32,6 +33,7 @@ gsqr = np.empty((working_height, working_width))
 phi = np.empty((working_height, working_width))
 attenuation_correction = np.empty((working_height, working_width))
 pixel_value_corrected_for_attenuation = np.empty((working_height, working_width))
+polarisation_angles_deg = np.empty((working_height, working_width))
 
 vector_origin_to_pixels = [int(0)] * working_height * working_width
 
@@ -66,22 +68,27 @@ for i in range(working_height):
 
         current_filter_angle_deg = calc_angle_between_vectors.run(vector_origin_to_current_pixel, ip.normal)
 
-        if ip.phi_limit[0] <= current_phi_deg <= ip.phi_limit[1]:  # Enforces the phi limits.
+        current_polarisation_angle = abs(calc_angle_between_vectors.run(unit_vector_source_to_origin, vector_origin_to_current_pixel))
 
-            filter_angles_deg[i][j] = abs(current_filter_angle_deg)
-            gsqr[i][j] = current_gsqr
-            phi[i][j] = current_phi_deg
-            vector_origin_to_pixels[(i * working_width) + j] = vector_origin_to_current_pixel
+        if current_polarisation_angle > 90.0:
 
-        else:
+            # This corrects for the case where the polarisation angle > 90.0. This angle should have a maximum value of
+            # 90.0.
+            current_polarisation_angle = 90.0 - abs(current_polarisation_angle - 90.0)
 
-            continue
+        filter_angles_deg[i][j] = abs(current_filter_angle_deg)
+        gsqr[i][j] = current_gsqr
+        phi[i][j] = current_phi_deg
+        vector_origin_to_pixels[(i * working_width) + j] = vector_origin_to_current_pixel
+        polarisation_angles_deg[i][j] = abs(current_polarisation_angle)
 
 make_image_from_array.run(gsqr,"gsqr_map.png","viridis","none")
 
 make_image_from_array.run(phi,"phi_map.png","viridis","none")
 
 make_image_from_array.run(filter_angles_deg, "filter_angle_map.png", "viridis", "none")
+
+make_image_from_array.run(polarisation_angles_deg, "polarisation_angle_map.png", "viridis", "none")
 
 ########################################################################################################################
 # The following section applies a correction to the intensity for each pixel due to attenuation by any filters.
@@ -94,6 +101,8 @@ if ip.correct_for_filter_attenuation is True:
 
     working_pixel_value = pixel_value_corrected_for_attenuation
 
+    make_image_from_array.run(attenuation_correction, "filter_attenuation_correction_map.png", "viridis", "none")
+
 ########################################################################################################################
 # The following section applies a correction to the intensity for each pixel due to sample attenuation.
 
@@ -104,7 +113,18 @@ if ip.correct_for_sample_attenuation is True:
 
     working_pixel_value = pixel_value_corrected_for_sample_attenuation
 
-make_image_from_array.run(sample_attenuation_correction, "sample_attenuation_correction_map.png", "viridis", "none")
+    make_image_from_array.run(sample_attenuation_correction, "sample_attenuation_correction_map.png", "viridis", "none")
+
+########################################################################################################################
+# The following section applies a correction to the intensity for each pixel due to sample attenuation.
+
+if ip.correct_for_polarisation is True:
+
+    pixel_value_corrected_for_polarisation, polarisation_correction = compensate_for_polarisation.run(working_pixel_value, working_height, working_width, polarisation_angles_deg)
+
+    working_pixel_value = pixel_value_corrected_for_polarisation
+
+    make_image_from_array.run(polarisation_correction, "polarisation_correction_map.png", "viridis", "none")
 
 ########################################################################################################################
 # The following section sorts the pixels from the original image into bins according to the gsqr and phi values
@@ -113,9 +133,9 @@ make_image_from_array.run(sample_attenuation_correction, "sample_attenuation_cor
 gsqr_phi_bins, gsqr_phi_bin_pixel_counter, gsqr_bins, phi_bins = make_bins_for_theta_phi.run(
     ip.num_gsqr_bins, ip.num_phi_bins, ip.gsqr_limit, ip.phi_limit)
 
-gsqr_phi_bins, gsqr_phi_bin_pixel_counter = populate_theta_phi_bins.run(
+gsqr_phi_bins, gsqr_phi_bin_pixel_counter, dumped_pixel_counter = populate_theta_phi_bins.run(
     working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter,
-    working_pixel_value)
+    working_pixel_value, raw_pixel_value, ip.gsqr_limit, ip.phi_limit)
 
 make_image_from_array.run(gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none")
 
@@ -136,5 +156,8 @@ make_simple_plot.run(
 write_data_to_file.run("integrated_intensity_vs_gsqr.dat", gsqr_bins, intensity_integrated_along_phi)
 
 write_data_to_file.run("summed_intensity_vs_gsqr.dat", gsqr_bins, intensity_summed_along_phi)
+
+########################################################################################################################
+# This final section finalises the code.
 
 print "Finished!"

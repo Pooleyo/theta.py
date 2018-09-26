@@ -10,6 +10,7 @@ def run(image_array, filename, colourmap, interpolation_type):
         os.makedirs("output")
 
     plt.imshow(image_array, cmap=colourmap, interpolation=interpolation_type)
+    plt.colorbar()
     plt.savefig("output/" + filename)
     plt.close()
 
