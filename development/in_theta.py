@@ -1,4 +1,4 @@
-forward_scatter_filename = "s10260_PSL_forward_scatter_plate.tif" # "3x4_pixel_value_1.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
+forward_scatter_filename = "PSL_plate4_s10257_BBXRD.tif" # "3x4_pixel_value_1.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
 
 source_position = [50.0,0.0,50.0]  # In mm
 offset = [0,11,270]  # X offset (mm), Y offset (mm), rotation (degrees)
@@ -28,7 +28,7 @@ sample_attenuation_length_90_deg = 8
 
 correct_for_polarisation = True
 
-gsqr_limit = [0.0, 10.6]
+gsqr_limit = [0.0, 9.5]
 phi_limit = [-60.0, 60.0]
 
 num_gsqr_bins = 200
