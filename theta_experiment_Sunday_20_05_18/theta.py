@@ -25,7 +25,7 @@ from PIL import Image
 
 ######################################
 
-im = Image.open(ip.forward_scatter_filename)
+im = Image.open(ip.image_filename)
 width, height = im.size
 pix = im.load()
  
