@@ -17,6 +17,9 @@ view_y = [0.46, 0.00, 0.89]  # "normalised"
 wavelength = 1.851  # In Angstroms
 a_lattice = 3.3  # In Angstroms
 
+num_subpixels_height = 3
+num_subpixels_width = 3
+
 correct_for_filter_attenuation = True
 filter_thickness = 10.0  # [10.0, 6.0]
 filter_attenuation_length_at_90_deg = 34.1  # [34.1, 109.7] # The attenuation length(s) of filter(s) used, in microns.

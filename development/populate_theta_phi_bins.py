@@ -1,4 +1,4 @@
-def run(working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter, working_pixel_value, raw_pixel_value, gsqr_limit, phi_limit):
+def run(working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter, working_pixel_value, subpixel_value, gsqr_limit, phi_limit):
 
     import numpy as np   
 
@@ -12,7 +12,7 @@ def run(working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_
 
             # This first statement checks if the pixel value is 0. We don't want this to be counted, since it will
             # decrease the integrated intensity without actually being a contributing pixel.
-            if raw_pixel_value[pixel_row][pixel_col] == 0.0:
+            if subpixel_value[pixel_row][pixel_col] == 0.0:
 
                 dumped_pixel_counter += 1
 

@@ -14,6 +14,7 @@ import make_simple_plot
 import write_data_to_file
 import compensate_for_sample_attenuation
 import compensate_for_polarisation
+import make_subpixel_array
 
 import numpy as np
 from skimage import io
@@ -22,9 +23,14 @@ from skimage import io
 # The following section opens the image and sets up some data structures that are required for the code to function.
 
 raw_pixel_value = io.imread(ip.forward_scatter_filename)
-# TODO create subpixels here
 
 working_pixel_value = raw_pixel_value
+
+subpixel_value = make_subpixel_array.run(working_pixel_value, ip.num_subpixels_height, ip.num_subpixels_width)
+
+make_image_from_array.run(subpixel_value, "subpixel_image.png", "viridis", "none")
+
+working_pixel_value = subpixel_value
 
 working_height, working_width = np.shape(working_pixel_value)
 
@@ -82,9 +88,9 @@ for i in range(working_height):
         vector_origin_to_pixels[(i * working_width) + j] = vector_origin_to_current_pixel
         polarisation_angles_deg[i][j] = abs(current_polarisation_angle)
 
-make_image_from_array.run(gsqr,"gsqr_map.png","viridis","none")
+make_image_from_array.run(gsqr, "gsqr_map.png", "viridis", "none")
 
-make_image_from_array.run(phi,"phi_map.png","viridis","none")
+make_image_from_array.run(phi, "phi_map.png", "viridis", "none")
 
 make_image_from_array.run(filter_angles_deg, "filter_angle_map.png", "viridis", "none")
 
@@ -116,11 +122,12 @@ if ip.correct_for_sample_attenuation is True:
     make_image_from_array.run(sample_attenuation_correction, "sample_attenuation_correction_map.png", "viridis", "none")
 
 ########################################################################################################################
-# The following section applies a correction to the intensity for each pixel due to sample attenuation.
+# The following section applies a correction to the intensity for each pixel due to polarisation.
 
 if ip.correct_for_polarisation is True:
 
-    pixel_value_corrected_for_polarisation, polarisation_correction = compensate_for_polarisation.run(working_pixel_value, working_height, working_width, polarisation_angles_deg)
+    pixel_value_corrected_for_polarisation, polarisation_correction = compensate_for_polarisation.run(
+        working_pixel_value, working_height, working_width, polarisation_angles_deg)
 
     working_pixel_value = pixel_value_corrected_for_polarisation
 
@@ -135,7 +142,7 @@ gsqr_phi_bins, gsqr_phi_bin_pixel_counter, gsqr_bins, phi_bins = make_bins_for_t
 
 gsqr_phi_bins, gsqr_phi_bin_pixel_counter, dumped_pixel_counter = populate_theta_phi_bins.run(
     working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter,
-    working_pixel_value, raw_pixel_value, ip.gsqr_limit, ip.phi_limit)
+    working_pixel_value, subpixel_value, ip.gsqr_limit, ip.phi_limit)
 
 make_image_from_array.run(gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none")
 
