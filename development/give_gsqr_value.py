@@ -28,9 +28,9 @@ def run(i, j, wavelength, a_lattice, norm_view_x, norm_view_y, central_pixel, wi
     unit_vector_origin_to_current_pixel = vector_origin_to_current_pixel/distance_origin_to_current_pixel 
 
     g = (unit_vector_origin_to_current_pixel - unit_vector_source_to_origin) * (1/wavelength)
-    
+
     g = np.linalg.norm(g) / (1.0/a_lattice)
-    
+
     gsqr = g ** 2
 
     return gsqr, vector_origin_to_current_pixel

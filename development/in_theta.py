@@ -1,4 +1,4 @@
-image_filename = ["PSL_plate4_s10257_BBXRD.tif"] # "3x4_pixel_value_1.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
+image_filename = ["3x4_pixel_value_1.tif"] # "3x4_pixel_value_1.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
 
 source_position = [[50.0,0.0,50.0]]  # In mm
 offset = [[0,11,270]]  # X offset (mm), Y offset (mm), rotation (degrees)
