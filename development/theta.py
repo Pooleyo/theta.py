@@ -1,10 +1,9 @@
 # This code will unwrap diffraction image plate scans into G^2-phi space.
 
-import in_theta as ip
+import in_theta_2 as ip
 import work_out_common_results
-import give_gsqr_value
 import calc_plane_from_two_vectors
-import calc_angle_between_vectors
+import loop_through_pixels
 import make_bins_for_theta_phi
 import populate_theta_phi_bins
 import make_image_from_array
@@ -19,6 +18,7 @@ import compile_multiple_integrated_intensities
 
 import numpy as np
 from skimage import io
+
 
 def run():
 
@@ -55,7 +55,7 @@ def run():
 
         print "Initialised..."
 
-        central_pixel, width_mm_per_pixel, height_mm_per_pixel, norm_view_x, norm_view_y, vector_origin_to_central_pixel, \
+        central_point, width_mm_per_pixel, height_mm_per_pixel, norm_view_x, norm_view_y, vector_origin_to_central_pixel, \
         unit_vector_source_to_origin, adjust_to_centre_of_pixel = work_out_common_results.run(
             working_width, working_height, ip.x_scale[k], ip.y_scale[k], ip.view_x[k], ip.view_y[k], ip.offset[k], ip.normal[k],
             ip.source_position[k])
@@ -64,43 +64,11 @@ def run():
 
         print "Calculating gsqr and phi for each pixel..."
 
-        for i in range(working_height):
-
-            for j in range(working_width):
-
-                # numpy arrays have shape = (working_height, working_width)
-
-                current_gsqr, vector_origin_to_current_pixel = give_gsqr_value.run(
-                    j, i, ip.wavelength, ip.a_lattice, norm_view_x, norm_view_y, central_pixel, width_mm_per_pixel,
-                    height_mm_per_pixel, vector_origin_to_central_pixel, unit_vector_source_to_origin,
-                    adjust_to_centre_of_pixel, working_width, working_height)
-
-                current_normal_to_plane = calc_plane_from_two_vectors.run(vector_origin_to_current_pixel, [0.0, 0.0, 1.0])
-
-                current_phi_deg = calc_angle_between_vectors.run(current_normal_to_plane, phi0_plane_normal)
-
-                current_filter_angle_deg = calc_angle_between_vectors.run(vector_origin_to_current_pixel, ip.normal[k])
-
-                current_polarisation_angle = abs(calc_angle_between_vectors.run(unit_vector_source_to_origin,
-                                                                                vector_origin_to_current_pixel))
-
-                if current_polarisation_angle > 90.0:
-
-                    # This corrects for the case where the polarisation angle > 90.0. This angle should have a maximum value
-                    #  of 90.0.
-
-                    current_polarisation_angle = 90.0 - abs(current_polarisation_angle - 90.0)
-
-                filter_angles_deg[i][j] = abs(current_filter_angle_deg)
-                gsqr[i][j] = current_gsqr
-                phi[i][j] = current_phi_deg
-                vector_origin_to_pixels[(i * working_width) + j] = vector_origin_to_current_pixel
-                polarisation_angles_deg[i][j] = abs(current_polarisation_angle)
-
-        print unit_vector_source_to_origin
-        print vector_origin_to_pixels
-        print gsqr
-        print phi
+        filter_angles_deg, gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg = loop_through_pixels.run(
+            working_height, working_width, ip.wavelength, ip.a_lattice, norm_view_x, norm_view_y,
+            central_point, width_mm_per_pixel, height_mm_per_pixel, vector_origin_to_central_pixel,
+            unit_vector_source_to_origin, adjust_to_centre_of_pixel, phi0_plane_normal, ip.normal[k], filter_angles_deg,
+            gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg, working_pixel_value)
 
         make_image_from_array.run(gsqr, "gsqr_map.png", "viridis", "none", output_folder)
 
@@ -157,7 +125,6 @@ def run():
         gsqr_phi_bins, gsqr_phi_bin_pixel_counter, dumped_pixel_counter = populate_theta_phi_bins.run(
             working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter,
             working_pixel_value, subpixel_value, ip.gsqr_limit[k], ip.phi_limit[k])
-
 
         make_image_from_array.run(gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none", output_folder)
 

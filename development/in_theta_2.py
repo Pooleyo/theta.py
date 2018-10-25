@@ -1,4 +1,4 @@
-image_filename = ["PSL_plate_1_s10268_BBXRD.tif", "PSL_plate_2_s10268_BBXRD.tif", "PSL_plate_3_s10268_BBXRD.tif", "PSL_plate_4_s10268_BBXRD.tif"] # "3x4_pixel_value_1.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
+image_filename = ["PSL_plate_3_s10268_BBXRD.tif", "PSL_plate_2_s10268_BBXRD.tif", "PSL_plate_1_s10268_BBXRD.tif", "PSL_plate_4_s10268_BBXRD.tif",] # "3x4_pixel_value_1.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
 
 source_position = [[50.0, 0.0, 50.0], [50.0, 0.0, 50.0], [50.0, 0.0, 50.0], [50.0, 0.0, 50.0]]  # In mm
 offset = [[1, 11.7, 270], [0.5, 11, 270], [0, 11.7, 180], [0, 11.7, 270]]  # X offset (mm), Y offset (mm), rotation (degrees)
@@ -14,7 +14,7 @@ view_x = [[-1.0, 0.0, 0.00], [0.0, -1.0, 0.00], [1.0, 0.0, 0.00], [0.0, 1.0, 0.0
 view_y = [[0.0, 0.44, 0.90], [-0.45, 0.00, 0.89], [0.00, -0.45, 0.90], [0.44, 0.00, 0.90]]  # "normalised"
 
 
-wavelength = 1.851  # In Angstroms
+wavelength = 1.39  # In Angstroms
 a_lattice = 3.3  # In Angstroms
 
 num_subpixels_height = 1
@@ -30,11 +30,11 @@ correct_for_sample_attenuation = True
 
 correct_for_polarisation = True
 
-gsqr_limit = [[3.0, 20.0], [3.0, 20.0], [3.0, 20.0], [3.0, 20.0]]
-phi_limit = [[-360.0, 360.0],[-360.0, 360.0], [-360.0, 360.0], [-360.0, 360.0]]
+gsqr_limit = [[3.0, 22.0], [3.0, 22.0], [3.0, 22.0], [3.0, 22.0]]
+phi_limit = [[-180.0, 180.0], [-180.0, 180.0], [-180.0, 180.0], [-180.0, 180.0]]
 
-num_gsqr_bins = 200
-num_phi_bins = 100
+num_gsqr_bins = 800
+num_phi_bins = 400
 
 plot = True
 debug = False
