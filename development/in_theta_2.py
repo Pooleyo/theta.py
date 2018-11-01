@@ -1,3 +1,5 @@
+use_previous_pixel_loop = True
+
 image_filename = ["PSL_plate_3_s10268_BBXRD.tif", "PSL_plate_2_s10268_BBXRD.tif", "PSL_plate_1_s10268_BBXRD.tif", "PSL_plate_4_s10268_BBXRD.tif"] # "3x4_pixel_value_1.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
 
 source_position = [[50.0, 0.0, 50.0], [50.0, 0.0, 50.0], [50.0, 0.0, 50.0], [50.0, 0.0, 50.0]]  # In mm

@@ -15,10 +15,11 @@ import compensate_for_sample_attenuation
 import compensate_for_polarisation
 import make_subpixel_array
 import compile_multiple_integrated_intensities
+import save_pixel_data_to_binary_files
+import load_pixel_data_from_binary_files
 
 import numpy as np
 from skimage import io
-
 
 def run():
 
@@ -62,13 +63,35 @@ def run():
 
         phi0_plane_normal = calc_plane_from_two_vectors.run(vector_origin_to_central_pixel, [0.0, 0.0, 1.0])
 
-        print "Calculating gsqr and phi for each pixel..."
+        binary_directory = "binaries/" + output_folder
 
-        filter_angles_deg, gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg = loop_through_pixels.run(
-            working_height, working_width, ip.wavelength, ip.a_lattice, norm_view_x, norm_view_y,
-            central_point, width_mm_per_pixel, height_mm_per_pixel, vector_origin_to_central_pixel,
-            unit_vector_source_to_origin, adjust_to_centre_of_pixel, phi0_plane_normal, ip.normal[k], filter_angles_deg,
-            gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg, working_pixel_value)
+        array_data_filenames = ["filter_angles", "gsqr", "phi", "polarisation_angles"]
+
+        array_data_list = [filter_angles_deg, gsqr, phi, polarisation_angles_deg]
+
+        list_data_filenames = ["vector_origin_to_pixels"]
+
+        list_data = [vector_origin_to_pixels]
+
+        if ip.use_previous_pixel_loop is False:
+
+            print "Calculating values for each pixel..."
+
+            filter_angles_deg, gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg = loop_through_pixels.run(
+                working_height, working_width, ip.wavelength, ip.a_lattice, norm_view_x, norm_view_y,
+                central_point, width_mm_per_pixel, height_mm_per_pixel, vector_origin_to_central_pixel,
+                unit_vector_source_to_origin, adjust_to_centre_of_pixel, phi0_plane_normal, ip.normal[k], filter_angles_deg,
+                gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg, working_pixel_value)
+
+            save_pixel_data_to_binary_files.run(array_data_filenames, array_data_list, list_data_filenames, list_data,
+                                                binary_directory)
+
+        else:
+
+            print "Loading values for each pixel..."
+
+            filter_angles_deg, gsqr, phi, polarisation_angles_deg, vector_origin_to_pixels = \
+                load_pixel_data_from_binary_files.run(array_data_filenames, list_data_filenames, binary_directory)
 
         make_image_from_array.run(gsqr, "gsqr_map.png", "viridis", "none", output_folder)
 
@@ -76,7 +99,8 @@ def run():
 
         make_image_from_array.run(filter_angles_deg, "filter_angle_map.png", "viridis", "none", output_folder)
 
-        make_image_from_array.run(polarisation_angles_deg, "polarisation_angle_map.png", "viridis", "none", output_folder)
+        make_image_from_array.run(polarisation_angles_deg, "polarisation_angle_map.png", "viridis", "none",
+                                  output_folder)
 
         ####################################################################################################################
         # The following section applies a correction to the intensity for each pixel due to attenuation by any filters.

@@ -12,7 +12,6 @@ def run(working_height, working_width, wavelength, a_lattice, norm_view_x, norm_
 
         for j in range(working_width):
 
-            #print "\nRow: " + str(i) + "\tCol: " + str(j)
             # numpy arrays have shape = (working_height, working_width)
 
             current_pixel = [i, j]
