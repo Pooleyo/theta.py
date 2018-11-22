@@ -1,6 +1,6 @@
 # This code will unwrap diffraction image plate scans into G^2-phi space.
 
-import in_theta_2 as ip
+import in_theta_3 as ip
 import work_out_common_results
 import calc_plane_from_two_vectors
 import loop_through_pixels
