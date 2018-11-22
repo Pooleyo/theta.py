@@ -9,7 +9,6 @@ def run(gsqr_bins, phi_bins, image_list):
 
     for iterator, current_image in enumerate(image_list):
 
-        print current_image
         output_folder = "output_" + current_image[:-4]
 
         integrated_intensity_filename = output_folder + "/integrated_intensity_vs_gsqr.dat"
@@ -24,10 +23,6 @@ def run(gsqr_bins, phi_bins, image_list):
 
             compiled_integrated_intensity[i] += intensity
 
-            print intensity
-            print type(intensity)
-            print gsqr_counter[i]
-
             if intensity == min(current_integrated_intensity):
 
                 continue
@@ -35,8 +30,6 @@ def run(gsqr_bins, phi_bins, image_list):
             else:
 
                 gsqr_counter[i] += 1
-
-    print gsqr_counter
 
     for i, intensity in enumerate(compiled_integrated_intensity):
 

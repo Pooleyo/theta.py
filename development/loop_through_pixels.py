@@ -1,7 +1,7 @@
 def run(working_height, working_width, wavelength, a_lattice, norm_view_x, norm_view_y, central_point,
         width_mm_per_pixel, height_mm_per_pixel, vector_origin_to_central_point, unit_vector_source_to_origin,
         adjust_to_centre_of_pixel, phi0_plane_normal, normal, filter_angles_deg, gsqr, phi, vector_origin_to_pixels,
-        polarisation_angles_deg, working_pixel_value):
+        polarisation_angles_deg, source_position):
 
     import calc_plane_from_two_vectors
     import calc_angle_between_vectors
@@ -42,14 +42,14 @@ def run(working_height, working_width, wavelength, a_lattice, norm_view_x, norm_
 
             current_gsqr = g ** 2
 
-            current_normal_to_plane = calc_plane_from_two_vectors.run(vector_origin_to_current_pixel_top_left, [0.0, 0.0, 1.0])
+            current_normal_to_plane = calc_plane_from_two_vectors.run(vector_origin_to_current_pixel_centre, source_position)
 
             current_phi_deg = calc_angle_between_vectors.run(current_normal_to_plane, phi0_plane_normal)
 
-            current_filter_angle_deg = calc_angle_between_vectors.run(vector_origin_to_current_pixel_top_left, normal)
+            current_filter_angle_deg = calc_angle_between_vectors.run(vector_origin_to_current_pixel_centre, normal)
 
             current_polarisation_angle = abs(calc_angle_between_vectors.run(unit_vector_source_to_origin,
-                                                                            vector_origin_to_current_pixel_top_left))
+                                                                            vector_origin_to_current_pixel_centre))
 
             if current_polarisation_angle > 90.0:
                 # This corrects for the case where the polarisation angle > 90.0. This angle should have a maximum value
@@ -60,7 +60,7 @@ def run(working_height, working_width, wavelength, a_lattice, norm_view_x, norm_
             filter_angles_deg[i][j] = abs(current_filter_angle_deg)
             gsqr[i][j] = current_gsqr
             phi[i][j] = current_phi_deg
-            vector_origin_to_pixels[(i * working_width) + j] = vector_origin_to_current_pixel_top_left
+            vector_origin_to_pixels[(i * working_width) + j] = vector_origin_to_current_pixel_centre
             polarisation_angles_deg[i][j] = abs(current_polarisation_angle)
 
     return filter_angles_deg, gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg

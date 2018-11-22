@@ -32,7 +32,7 @@ correct_for_sample_attenuation = True
 
 correct_for_polarisation = True
 
-gsqr_limit = [[3.0, 22.0], [3.0, 22.0], [3.0, 22.0], [3.0, 22.0]]
+gsqr_limit = [[3.0, 25.0], [3.0, 25.0], [3.0, 25.0], [3.0, 25.0]]
 phi_limit = [[-180.0, 180.0], [-180.0, 180.0], [-180.0, 180.0], [-180.0, 180.0]]
 
 num_gsqr_bins = 1000
