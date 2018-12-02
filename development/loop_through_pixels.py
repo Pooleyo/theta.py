@@ -1,10 +1,10 @@
 def run(working_height, working_width, wavelength, a_lattice, norm_view_x, norm_view_y, central_point,
         width_mm_per_pixel, height_mm_per_pixel, vector_origin_to_central_point, unit_vector_source_to_origin,
-        adjust_to_centre_of_pixel, phi0_plane_normal, normal, filter_angles_deg, gsqr, phi, vector_origin_to_pixels,
-        polarisation_angles_deg, source_position):
+        adjust_to_centre_of_pixel, phi_plane_normal, normal, filter_angles_deg, gsqr, phi, vector_origin_to_pixels,
+        polarisation_angles_deg, phi0_vector):
 
-    import calc_plane_from_two_vectors
     import calc_angle_between_vectors
+    import find_vector_component_in_phi_plane
 
     import numpy as np
 
@@ -42,9 +42,9 @@ def run(working_height, working_width, wavelength, a_lattice, norm_view_x, norm_
 
             current_gsqr = g ** 2
 
-            current_normal_to_plane = calc_plane_from_two_vectors.run(vector_origin_to_current_pixel_centre, source_position)
+            unit_vector_component_in_phi_plane = find_vector_component_in_phi_plane.run(vector_origin_to_current_pixel_centre, phi_plane_normal)
 
-            current_phi_deg = calc_angle_between_vectors.run(current_normal_to_plane, phi0_plane_normal)
+            current_phi_deg = calc_angle_between_vectors.run(unit_vector_component_in_phi_plane, phi0_vector)
 
             current_filter_angle_deg = calc_angle_between_vectors.run(vector_origin_to_current_pixel_centre, normal)
 

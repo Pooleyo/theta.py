@@ -1,4 +1,4 @@
-def run(gsqr_phi_bins, gsqr_phi_bin_pixel_counter):
+def run(gsqr_phi_bins, gsqr_phi_bin_pixel_counter, minimum_pixels_in_gsqr_bin):
 
     import numpy as np
 
@@ -22,7 +22,7 @@ def run(gsqr_phi_bins, gsqr_phi_bin_pixel_counter):
 
     for col in range(width):
 
-        if number_pixels_in_each_col[0, col] == 0:
+        if number_pixels_in_each_col[0, col] <= minimum_pixels_in_gsqr_bin:
 
             intensity_integrated_across_phi[0, col] = 0.0
 

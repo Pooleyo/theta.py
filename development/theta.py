@@ -2,7 +2,6 @@
 
 import in_theta_2 as ip
 import work_out_common_results
-import calc_plane_from_two_vectors
 import loop_through_pixels
 import make_bins_for_theta_phi
 import populate_theta_phi_bins
@@ -17,11 +16,18 @@ import make_subpixel_array
 import compile_multiple_integrated_intensities
 import save_pixel_data_to_binary_files
 import load_pixel_data_from_binary_files
+import find_vector_component_in_phi_plane
 
 import numpy as np
 from skimage import io
 
 def run():
+
+    vector_define_phi0 = [0.0, 0.0, 1.0]
+
+    phi_plane_normal = ip.source_position[0]
+
+    phi0_vector = find_vector_component_in_phi_plane.run(vector_define_phi0, phi_plane_normal)
 
     for k, current_image in enumerate(ip.image_filename):
 
@@ -61,8 +67,6 @@ def run():
             working_width, working_height, ip.x_scale[k], ip.y_scale[k], ip.view_x[k], ip.view_y[k], ip.offset[k], ip.normal[k],
             ip.source_position[k])
 
-        phi0_plane_normal = calc_plane_from_two_vectors.run(vector_origin_to_central_pixel, ip.source_position[k])
-
         binary_directory = "binaries/" + output_folder
 
         array_data_filenames = ["filter_angles", "gsqr", "phi", "polarisation_angles"]
@@ -80,12 +84,11 @@ def run():
             filter_angles_deg, gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg = loop_through_pixels.run(
                 working_height, working_width, ip.wavelength, ip.a_lattice, norm_view_x, norm_view_y,
                 central_point, width_mm_per_pixel, height_mm_per_pixel, vector_origin_to_central_pixel,
-                unit_vector_source_to_origin, adjust_to_centre_of_pixel, phi0_plane_normal, ip.normal[k], filter_angles_deg,
-                gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg, ip.source_position[k])
+                unit_vector_source_to_origin, adjust_to_centre_of_pixel, phi_plane_normal, ip.normal[k], filter_angles_deg,
+                gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg, phi0_vector)
 
             save_pixel_data_to_binary_files.run(array_data_filenames, array_data_list, list_data_filenames, list_data,
                                                 binary_directory)
-
         else:
 
             print "Loading values for each pixel..."
@@ -156,7 +159,7 @@ def run():
         # The following section integrates along phi.
 
         intensity_integrated_along_phi, intensity_summed_along_phi = integrate_along_phi.run(
-            gsqr_phi_bins, gsqr_phi_bin_pixel_counter)
+            gsqr_phi_bins, gsqr_phi_bin_pixel_counter, ip.minimum_pixels_in_gsqr_bin)
 
         make_simple_plot.run(
             gsqr_bins, intensity_integrated_along_phi[0], "c", "$|G^2|$", "Intensity $(arb.)$",
@@ -181,6 +184,8 @@ def run():
     make_simple_plot.run(
         gsqr, intensity, "c", "$|G^2|$", "Intensity $(arb.)$",
         "Integrated intensity vs. $|G^2|$", "integrated_intensity_vs_phi.png", output_folder)
+
+
 
     print "Finished!"
 
