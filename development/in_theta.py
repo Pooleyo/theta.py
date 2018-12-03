@@ -1,3 +1,5 @@
+use_previous_pixel_loop = False
+
 image_filename = ["3x4_test_image_0_to_12_thru_columns.tif"] # "3x4_pixel_value_1.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
 
 source_position = [[50.0,0.0,50.0]]  # In mm
@@ -35,6 +37,7 @@ phi_limit = [[-160.0, 160.0]]
 
 num_gsqr_bins = 200
 num_phi_bins = 100
+minimum_pixels_in_gsqr_bin = 1
 
 plot = True
 debug = False

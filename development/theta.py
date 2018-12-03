@@ -17,6 +17,7 @@ import compile_multiple_integrated_intensities
 import save_pixel_data_to_binary_files
 import load_pixel_data_from_binary_files
 import find_vector_component_in_phi_plane
+import compile_multiple_gsqr_vs_phi
 
 import numpy as np
 from skimage import io
@@ -28,6 +29,8 @@ def run():
     phi_plane_normal = ip.source_position[0]
 
     phi0_vector = find_vector_component_in_phi_plane.run(vector_define_phi0, phi_plane_normal)
+
+    all_gsqr_phi_bins = []
 
     for k, current_image in enumerate(ip.image_filename):
 
@@ -153,6 +156,8 @@ def run():
             working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter,
             working_pixel_value, subpixel_value, ip.gsqr_limit[k], ip.phi_limit[k])
 
+        all_gsqr_phi_bins.append(gsqr_phi_bins)
+
         make_image_from_array.run(gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none", output_folder)
 
         ####################################################################################################################
@@ -181,11 +186,13 @@ def run():
 
     gsqr, intensity = compile_multiple_integrated_intensities.run(gsqr_bins, phi_bins, ip.image_filename)
 
+    master_gsqr_phi_bins = compile_multiple_gsqr_vs_phi.run(all_gsqr_phi_bins)
+
     make_simple_plot.run(
         gsqr, intensity, "c", "$|G^2|$", "Intensity $(arb.)$",
         "Integrated intensity vs. $|G^2|$", "integrated_intensity_vs_phi.png", output_folder)
 
-
+    make_image_from_array.run(master_gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none", output_folder)
 
     print "Finished!"
 
