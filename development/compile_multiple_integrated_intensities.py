@@ -3,6 +3,8 @@ def run(gsqr_bins, phi_bins, image_list):
     import numpy as np
     from copy import deepcopy
 
+    print "Compiling multiple integrated intensities..."
+
     compiled_gsqr = deepcopy(gsqr_bins)
 
     compiled_integrated_intensity = [0.0] * len(gsqr_bins)

@@ -3,6 +3,8 @@ def run(working_pixel_value, sample_normal, source, vector_origin_to_pixels):
     import calc_angle_between_vectors
     import numpy as np
 
+    print "Compensate for sample attenuation..."
+
     source_normal_angle = calc_angle_between_vectors.run(
         source, sample_normal)
 

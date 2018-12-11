@@ -2,6 +2,8 @@ def run(working_pixel_value, height, width, polarisation_angles):
 
     import numpy as np
 
+    print "Compensating for polarisation..."
+
     new_pixel_value = np.zeros((height, width))
     polarisation_correction_factor = np.zeros((height, width))
 

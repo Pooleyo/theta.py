@@ -2,13 +2,13 @@ def run(all_gsqr_phi_bins):
 
     import numpy as np
 
-    print all_gsqr_phi_bins
+    print "Compiling multiple gsqr vs. phi images..."
+
     height, width = np.shape(all_gsqr_phi_bins[0])
-    print height
-    print width
+
     master_gsqr_phi_bins = np.zeros((height, width))
+
     pixel_counter = np.zeros((height, width))
-    print master_gsqr_phi_bins
 
     for i, gsqr_phi_bins in enumerate(all_gsqr_phi_bins):
 

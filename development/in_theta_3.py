@@ -40,3 +40,5 @@ num_phi_bins = 400
 
 plot = True
 debug = False
+
+minimum_pixels_in_gsqr_bin = 500
