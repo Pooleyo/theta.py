@@ -44,6 +44,8 @@ def run():
 
         working_pixel_value = raw_pixel_value
 
+        working_pixel_value = np.nan_to_num(working_pixel_value)
+
         subpixel_value = make_subpixel_array.run(working_pixel_value, ip.num_subpixels_height, ip.num_subpixels_width)
 
         make_image_from_array.run(subpixel_value, "subpixel_image.png", "viridis", "none", output_folder, False)
@@ -166,6 +168,7 @@ def run():
 
         ####################################################################################################################
         # The following section integrates along phi.
+
 
         intensity_integrated_along_phi, intensity_summed_along_phi = integrate_along_phi.run(
             gsqr_phi_bins, gsqr_phi_bin_pixel_counter, ip.minimum_pixels_in_gsqr_bin)

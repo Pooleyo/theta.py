@@ -17,9 +17,9 @@ def run(working_pixel_value, sample_normal, source, vector_origin_to_pixels):
     corrected_pixel_value = np.zeros((working_height, working_width))
 
     sample_correction_factor = np.zeros((working_height, working_width))
-
+    print "start loop"
     for i in range(working_height):
-
+        print i
         for j in range(working_width):
 
             current_vector_origin_pixel = vector_origin_to_pixels[(i * working_width) + j]
@@ -45,5 +45,6 @@ def run(working_pixel_value, sample_normal, source, vector_origin_to_pixels):
                 sample_correction_factor[i][j] = correction_factor
 
                 corrected_pixel_value[i][j] = working_pixel_value[i][j] * correction_factor
+    exit()
 
     return corrected_pixel_value, sample_correction_factor
