@@ -5,7 +5,7 @@ import work_out_common_results
 import loop_through_pixels
 import make_bins_for_theta_phi
 import populate_theta_phi_bins
-import make_image_from_array
+import make_plot_from_array
 import compensate_for_filters
 import integrate_along_phi
 import make_simple_plot
@@ -19,6 +19,7 @@ import save_pixel_data_to_binary_files
 import load_pixel_data_from_binary_files
 import find_vector_component_in_phi_plane
 import compile_multiple_gsqr_vs_phi
+import make_tif_from_array
 
 import numpy as np
 from skimage import io
@@ -48,9 +49,9 @@ def run():
 
         subpixel_value = make_subpixel_array.run(working_pixel_value, ip.num_subpixels_height, ip.num_subpixels_width)
 
-        make_image_from_array.run(subpixel_value, "subpixel_image.png", "viridis", "none", output_folder, False)
+        make_plot_from_array.run(subpixel_value, "subpixel_image.png", "viridis", "none", output_folder, False)
 
-        make_image_from_array.run(subpixel_value, "subpixel_image_log.png", "viridis", "none", output_folder, True)
+        make_plot_from_array.run(subpixel_value, "subpixel_image_log.png", "viridis", "none", output_folder, True)
 
         working_pixel_value = subpixel_value
 
@@ -104,14 +105,14 @@ def run():
             filter_angles_deg, gsqr, phi, polarisation_angles_deg, vector_origin_to_pixels = \
                 load_pixel_data_from_binary_files.run(array_data_filenames, list_data_filenames, binary_directory)
 
-        make_image_from_array.run(gsqr, "gsqr_map.png", "viridis", "none", output_folder, False)
+        make_plot_from_array.run(gsqr, "gsqr_map.png", "viridis", "none", output_folder, False)
 
-        make_image_from_array.run(phi, "phi_map.png", "viridis", "none", output_folder, False)
+        make_plot_from_array.run(phi, "phi_map.png", "viridis", "none", output_folder, False)
 
-        make_image_from_array.run(filter_angles_deg, "filter_angle_map.png", "viridis", "none", output_folder, False)
+        make_plot_from_array.run(filter_angles_deg, "filter_angle_map.png", "viridis", "none", output_folder, False)
 
-        make_image_from_array.run(polarisation_angles_deg, "polarisation_angle_map.png", "viridis", "none",
-                                  output_folder, False)
+        make_plot_from_array.run(polarisation_angles_deg, "polarisation_angle_map.png", "viridis", "none",
+                                 output_folder, False)
 
         ####################################################################################################################
         # The following section applies a correction to the intensity for each pixel due to attenuation by any filters.
@@ -124,7 +125,7 @@ def run():
 
             working_pixel_value = pixel_value_corrected_for_attenuation
 
-            make_image_from_array.run(attenuation_correction, "filter_attenuation_correction_map.png", "viridis", "none", output_folder, False)
+            make_plot_from_array.run(attenuation_correction, "filter_attenuation_correction_map.png", "viridis", "none", output_folder, False)
 
         ####################################################################################################################
         # The following section applies a correction to the intensity for each pixel due to sample attenuation.
@@ -136,7 +137,7 @@ def run():
 
             working_pixel_value = pixel_value_corrected_for_sample_attenuation
 
-            make_image_from_array.run(sample_attenuation_correction, "sample_attenuation_correction_map.png", "viridis", "none", output_folder, False)
+            make_plot_from_array.run(sample_attenuation_correction, "sample_attenuation_correction_map.png", "viridis", "none", output_folder, False)
 
         ####################################################################################################################
         # The following section applies a correction to the intensity for each pixel due to polarisation.
@@ -148,7 +149,12 @@ def run():
 
             working_pixel_value = pixel_value_corrected_for_polarisation
 
-            make_image_from_array.run(polarisation_correction, "polarisation_correction_map.png", "viridis", "none", output_folder, False)
+            make_plot_from_array.run(polarisation_correction, "polarisation_correction_map.png", "viridis", "none", output_folder, False)
+
+        ####################################################################################################################
+        # This section makes an image with all the applied corrections.
+
+        make_tif_from_array.run(working_pixel_value, "corrections_applied_" + current_image, output_folder)
 
         ####################################################################################################################
         # The following section sorts the pixels from the original image into bins according to the gsqr and phi values
@@ -163,8 +169,8 @@ def run():
 
         all_gsqr_phi_bins.append(gsqr_phi_bins)
 
-        make_image_from_array.run(gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none", output_folder, False)
-        make_image_from_array.run(gsqr_phi_bins, "phi_vs_gsqr_log.png", "viridis", "none", output_folder, True)
+        make_plot_from_array.run(gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none", output_folder, False)
+        make_plot_from_array.run(gsqr_phi_bins, "phi_vs_gsqr_log.png", "viridis", "none", output_folder, True)
 
         ####################################################################################################################
         # The following section integrates along phi.
@@ -201,9 +207,9 @@ def run():
 
     write_data_to_file_type_2.run("integrated_intensity_vs_gsqr.dat", gsqr, intensity, output_folder)
 
-    make_image_from_array.run(master_gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none", output_folder, False)
+    make_plot_from_array.run(master_gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none", output_folder, False)
 
-    make_image_from_array.run(master_gsqr_phi_bins, "phi_vs_gsqr_log.png", "viridis", "none", output_folder, True)
+    make_plot_from_array.run(master_gsqr_phi_bins, "phi_vs_gsqr_log.png", "viridis", "none", output_folder, True)
 
     print "Finished!"
 
