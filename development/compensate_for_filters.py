@@ -17,7 +17,6 @@ def run(height, width, filter_angles_list_deg, pixel_value, filter_attenuation_l
             # following the equation: I = I_0 * e^(- path_length / attenuation_length)
 
             correction_factor = 1.0 / attenuation_factor
-
             pixel_value_corrected_for_attenuation[i][j] = pixel_value[i][j] * correction_factor  # We multiply by the reciprocal of the
             #  attenuation to revert to the original intensity.
 

@@ -36,7 +36,7 @@ def run():
 
     for k, current_image in enumerate(ip.image_filename):
 
-        ####################################################################################################################
+        ################################################################################################################
         # The following section opens the image and sets up some data structures that are required for the code to function.
 
         output_folder = "output_" + current_image[:-4]
@@ -63,10 +63,9 @@ def run():
         attenuation_correction = np.empty((working_height, working_width))
         pixel_value_corrected_for_attenuation = np.empty((working_height, working_width))
         polarisation_angles_deg = np.empty((working_height, working_width))
-
         vector_origin_to_pixels = [int(0)] * working_height * working_width
 
-        ####################################################################################################################
+        ################################################################################################################
         # The following section assigns gsqr and phi values to each of the pixels.
 
         print "Initialised..."
@@ -114,7 +113,7 @@ def run():
         make_plot_from_array.run(polarisation_angles_deg, "polarisation_angle_map.png", "viridis", "none",
                                  output_folder, False)
 
-        ####################################################################################################################
+        ################################################################################################################
         # The following section applies a correction to the intensity for each pixel due to attenuation by any filters.
 
         if ip.correct_for_filter_attenuation is True:
@@ -122,12 +121,11 @@ def run():
             pixel_value_corrected_for_attenuation, attenuation_correction = compensate_for_filters.run(
                 working_height, working_width, filter_angles_deg, working_pixel_value, ip.filter_attenuation_length_at_90_deg[k],
                 ip.filter_thickness[k], attenuation_correction, pixel_value_corrected_for_attenuation)
-
             working_pixel_value = pixel_value_corrected_for_attenuation
 
             make_plot_from_array.run(attenuation_correction, "filter_attenuation_correction_map.png", "viridis", "none", output_folder, False)
 
-        ####################################################################################################################
+        ################################################################################################################
         # The following section applies a correction to the intensity for each pixel due to sample attenuation.
 
         if ip.correct_for_sample_attenuation is True:
@@ -139,7 +137,7 @@ def run():
 
             make_plot_from_array.run(sample_attenuation_correction, "sample_attenuation_correction_map.png", "viridis", "none", output_folder, False)
 
-        ####################################################################################################################
+        ################################################################################################################
         # The following section applies a correction to the intensity for each pixel due to polarisation.
 
         if ip.correct_for_polarisation is True:
@@ -151,12 +149,28 @@ def run():
 
             make_plot_from_array.run(polarisation_correction, "polarisation_correction_map.png", "viridis", "none", output_folder, False)
 
-        ####################################################################################################################
+        ################################################################################################################
         # This section makes an image with all the applied corrections.
 
         make_tif_from_array.run(working_pixel_value, "corrections_applied_" + current_image, output_folder)
 
-        ####################################################################################################################
+        total_correction_array = np.zeros((working_height, working_width))
+
+        if ip.correct_for_filter_attenuation is True:
+
+            total_correction_array += attenuation_correction
+
+        if ip.correct_for_sample_attenuation is True:
+
+            total_correction_array += sample_attenuation_correction
+
+        if ip.correct_for_polarisation is True:
+
+            total_correction_array += polarisation_correction
+
+        make_tif_from_array.run(total_correction_array, "total_corrections.tif", output_folder)
+
+        ################################################################################################################
         # The following section sorts the pixels from the original image into bins according to the gsqr and phi values
         # determined previously.
 
@@ -172,7 +186,7 @@ def run():
         make_plot_from_array.run(gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none", output_folder, False)
         make_plot_from_array.run(gsqr_phi_bins, "phi_vs_gsqr_log.png", "viridis", "none", output_folder, True)
 
-        ####################################################################################################################
+        ################################################################################################################
         # The following section integrates along phi.
 
 
@@ -193,7 +207,7 @@ def run():
 
         print "Completed image " + str(k) + "..."
 
-        ####################################################################################################################
+        ################################################################################################################
 
     output_folder = "output_all"
 
