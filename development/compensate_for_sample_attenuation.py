@@ -14,9 +14,6 @@ def run(working_pixel_value, sample_normal, source, vector_origin_to_pixels):
 
     normal_angle_term = 1.0/np.sin(np.deg2rad(90.0))
 
-    print "normal term = " + str(normal_angle_term)
-    print "incident term = " + str(incident_angle_term)
-
     working_height, working_width = np.shape(working_pixel_value)
 
     corrected_pixel_value = np.zeros((working_height, working_width))

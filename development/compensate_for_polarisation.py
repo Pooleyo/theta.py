@@ -13,7 +13,7 @@ def run(working_pixel_value, height, width, polarisation_angles):
 
             # The correction factor below is inverted since we want to get the intensity as if this effect never
             # occurred.
-            correction_factor = 2.0 / (1 + np.cos(np.deg2rad(polarisation_angles[i][j])))
+            correction_factor = 2.0 / (1 + (np.cos(np.deg2rad(polarisation_angles[i][j]))) ** 2)
 
             new_pixel_value[i][j] = correction_factor * working_pixel_value[i][j]
 

@@ -154,19 +154,19 @@ def run():
 
         make_tif_from_array.run(working_pixel_value, "corrections_applied_" + current_image, output_folder)
 
-        total_correction_array = np.zeros((working_height, working_width))
+        total_correction_array = np.ones((working_height, working_width))
 
         if ip.correct_for_filter_attenuation is True:
 
-            total_correction_array += attenuation_correction
+            total_correction_array *= attenuation_correction
 
         if ip.correct_for_sample_attenuation is True:
 
-            total_correction_array += sample_attenuation_correction
+            total_correction_array *= sample_attenuation_correction
 
         if ip.correct_for_polarisation is True:
 
-            total_correction_array += polarisation_correction
+            total_correction_array *= polarisation_correction
 
         make_tif_from_array.run(total_correction_array, "total_corrections.tif", output_folder)
 
