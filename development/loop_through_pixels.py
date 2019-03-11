@@ -1,7 +1,7 @@
 def run(working_height, working_width, wavelength, a_lattice, norm_view_x, norm_view_y, central_point,
         width_mm_per_pixel, height_mm_per_pixel, vector_origin_to_central_point, unit_vector_source_to_origin,
         adjust_to_centre_of_pixel, phi_plane_normal, normal, filter_angles_deg, gsqr, phi, vector_origin_to_pixels,
-        polarisation_angles_deg, phi0_vector):
+        polarisation_angles_deg, phi0_vector, bragg_angles_deg):
 
     import calc_angle_between_vectors
     import find_vector_component_in_phi_plane
@@ -44,6 +44,8 @@ def run(working_height, working_width, wavelength, a_lattice, norm_view_x, norm_
 
             unit_vector_component_in_phi_plane = find_vector_component_in_phi_plane.run(vector_origin_to_current_pixel_centre, phi_plane_normal)
 
+            current_bragg_angle = 0.5 * abs(calc_angle_between_vectors.run(unit_vector_source_to_origin, unit_vector_origin_to_current_pixel_centre))
+
             current_phi_deg = calc_angle_between_vectors.run(unit_vector_component_in_phi_plane, phi0_vector)
 
             current_filter_angle_deg = calc_angle_between_vectors.run(vector_origin_to_current_pixel_centre, normal)
@@ -62,5 +64,6 @@ def run(working_height, working_width, wavelength, a_lattice, norm_view_x, norm_
             phi[i][j] = current_phi_deg
             vector_origin_to_pixels[(i * working_width) + j] = vector_origin_to_current_pixel_centre
             polarisation_angles_deg[i][j] = abs(current_polarisation_angle)
+            bragg_angles_deg[i][j] = current_bragg_angle
 
-    return filter_angles_deg, gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg
+    return filter_angles_deg, gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg, bragg_angles_deg

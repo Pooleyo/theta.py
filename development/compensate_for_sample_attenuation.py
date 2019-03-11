@@ -48,4 +48,8 @@ def run(working_pixel_value, sample_normal, source, vector_origin_to_pixels):
 
                 corrected_pixel_value[i][j] = working_pixel_value[i][j] * sample_correction_factor[i][j]
 
+                if sample_correction_factor[i][j] < 0.0:
+
+                    print "#### WARNING: NEGATIVE CORRECTION FACTOR ####"
+
     return corrected_pixel_value, sample_correction_factor

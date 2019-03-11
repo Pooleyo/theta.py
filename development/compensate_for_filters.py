@@ -22,4 +22,7 @@ def run(height, width, filter_angles_list_deg, pixel_value, filter_attenuation_l
 
             attenuation_correction[i][j] = correction_factor
 
+            if correction_factor < 0.0:
+                print "#### WARNING: NEGATIVE CORRECTION FACTOR ####"
+
     return pixel_value_corrected_for_attenuation, attenuation_correction

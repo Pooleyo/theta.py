@@ -1,5 +1,5 @@
 use_previous_pixel_loop = False
-image_filename = ["3x4_test_image_0_to_12_thru_columns.tif"] # "masked_PSL_plate_1_s10268_BBXRD.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
+image_filename = ["masked_PSL_plate_1_s10268_BBXRD.tif"] # "3x4_test_image_0_to_12_thru_columns.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
 
 source_position = [[50.0, 0.0, 50.0]]  # In mm
 offset = [[0, 11.7, 180]]  # X offset (mm), Y offset (mm), rotation (degrees)
@@ -30,6 +30,8 @@ filter_attenuation_length_at_90_deg = [34.1]  # [34.1, 109.7] # The attenuation 
 correct_for_sample_attenuation = True
 
 correct_for_polarisation = True
+
+correct_for_lorentz_factor = True
 
 gsqr_limit = [[3.0, 25.0]]
 phi_limit = [[-180.0, 180.0]]

@@ -20,6 +20,7 @@ import load_pixel_data_from_binary_files
 import find_vector_component_in_phi_plane
 import compile_multiple_gsqr_vs_phi
 import make_tif_from_array
+import compensate_for_lorentz_factor
 
 import numpy as np
 from skimage import io
@@ -63,6 +64,7 @@ def run():
         attenuation_correction = np.empty((working_height, working_width))
         pixel_value_corrected_for_attenuation = np.empty((working_height, working_width))
         polarisation_angles_deg = np.empty((working_height, working_width))
+        bragg_angles_deg = np.empty((working_height, working_width))
         vector_origin_to_pixels = [int(0)] * working_height * working_width
 
         ################################################################################################################
@@ -89,11 +91,12 @@ def run():
 
             print "Calculating values for each pixel..."
 
-            filter_angles_deg, gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg = loop_through_pixels.run(
+            filter_angles_deg, gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg, bragg_angles_deg = \
+                loop_through_pixels.run(
                 working_height, working_width, ip.wavelength, ip.a_lattice, norm_view_x, norm_view_y,
                 central_point, width_mm_per_pixel, height_mm_per_pixel, vector_origin_to_central_pixel,
                 unit_vector_source_to_origin, adjust_to_centre_of_pixel, phi_plane_normal, ip.normal[k], filter_angles_deg,
-                gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg, phi0_vector)
+                gsqr, phi, vector_origin_to_pixels, polarisation_angles_deg, phi0_vector, bragg_angles_deg)
 
             save_pixel_data_to_binary_files.run(array_data_filenames, array_data_list, list_data_filenames, list_data,
                                                 binary_directory)
@@ -111,6 +114,9 @@ def run():
         make_plot_from_array.run(filter_angles_deg, "filter_angle_map.png", "viridis", "none", output_folder, False)
 
         make_plot_from_array.run(polarisation_angles_deg, "polarisation_angle_map.png", "viridis", "none",
+                                 output_folder, False)
+
+        make_plot_from_array.run(bragg_angles_deg, "bragg_angle_map.png", "viridis", "none",
                                  output_folder, False)
 
         ################################################################################################################
@@ -150,6 +156,18 @@ def run():
             make_plot_from_array.run(polarisation_correction, "polarisation_correction_map.png", "viridis", "none", output_folder, False)
 
         ################################################################################################################
+        # The following section applies a correction to the intensity for each pixel due to the lorentz factor.
+
+        if ip.correct_for_lorentz_factor is True:
+
+            pixel_value_corrected_for_lorentz_factor, lorentz_correction = compensate_for_lorentz_factor.run(
+                working_pixel_value, working_height, working_width, bragg_angles_deg)
+
+            working_pixel_value = pixel_value_corrected_for_lorentz_factor
+
+            make_plot_from_array.run(lorentz_correction, "lorentz_correction_map.png", "viridis", "none", output_folder, False)
+
+        ################################################################################################################
         # This section makes an image with all the applied corrections.
 
         make_tif_from_array.run(working_pixel_value, "corrections_applied_" + current_image, output_folder)
@@ -167,6 +185,10 @@ def run():
         if ip.correct_for_polarisation is True:
 
             total_correction_array *= polarisation_correction
+
+        if ip.correct_for_lorentz_factor is True:
+
+            total_correction_array *= lorentz_correction
 
         make_tif_from_array.run(total_correction_array, "total_corrections.tif", output_folder)
 
