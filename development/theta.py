@@ -1,6 +1,6 @@
 # This code will unwrap diffraction image plate scans into G^2-phi space.
 
-import in_theta_2 as ip
+import in_theta_4 as ip
 import work_out_common_results
 import loop_through_pixels
 import make_bins_for_theta_phi
@@ -21,6 +21,7 @@ import find_vector_component_in_phi_plane
 import compile_multiple_gsqr_vs_phi
 import make_tif_from_array
 import compensate_for_lorentz_factor
+import compensate_for_NIOBIUM_atomic_form_factor
 
 import numpy as np
 from skimage import io
@@ -168,6 +169,18 @@ def run():
             make_plot_from_array.run(lorentz_correction, "lorentz_correction_map.png", "viridis", "none", output_folder, False)
 
         ################################################################################################################
+        # The following section applies a correction to the intensity for each pixel due to the lorentz factor.
+
+        if ip.correct_for_atomic_form_factor is True:
+
+            pixel_value_corrected_for_atomic_form_factor, atomic_form_factor_correction = compensate_for_NIOBIUM_atomic_form_factor.run(
+                working_pixel_value, working_height, working_width, bragg_angles_deg, output_folder, ip.wavelength)
+
+            working_pixel_value = pixel_value_corrected_for_atomic_form_factor
+
+            make_plot_from_array.run(atomic_form_factor_correction, "atomic_form_factor_correction_map.png", "viridis", "none", output_folder, False)
+
+        ################################################################################################################
         # This section makes an image with all the applied corrections.
 
         make_tif_from_array.run(working_pixel_value, "corrections_applied_" + current_image, output_folder)
@@ -190,7 +203,13 @@ def run():
 
             total_correction_array *= lorentz_correction
 
+        if ip.correct_for_atomic_form_factor is True:
+
+            total_correction_array *= atomic_form_factor_correction
+
         make_tif_from_array.run(total_correction_array, "total_corrections.tif", output_folder)
+
+        #make_plot_from_array.run(total_correction_array, "total_correction_map.png", "viridis", "none", output_folder, False)
 
         ################################################################################################################
         # The following section sorts the pixels from the original image into bins according to the gsqr and phi values
@@ -210,7 +229,6 @@ def run():
 
         ################################################################################################################
         # The following section integrates along phi.
-
 
         intensity_integrated_along_phi, intensity_summed_along_phi = integrate_along_phi.run(
             gsqr_phi_bins, gsqr_phi_bin_pixel_counter, ip.minimum_pixels_in_gsqr_bin)

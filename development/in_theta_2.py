@@ -33,6 +33,8 @@ correct_for_polarisation = True
 
 correct_for_lorentz_factor = True
 
+correct_for_atomic_form_factor = True
+
 gsqr_limit = [[3.0, 25.0]]
 phi_limit = [[-180.0, 180.0]]
 
