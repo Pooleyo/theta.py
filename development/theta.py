@@ -1,6 +1,6 @@
 # This code will unwrap diffraction image plate scans into G^2-phi space.
 
-import in_theta_4 as ip
+import in_theta as ip
 import work_out_common_results
 import loop_through_pixels
 import make_bins_for_theta_phi
@@ -22,6 +22,7 @@ import compile_multiple_gsqr_vs_phi
 import make_tif_from_array
 import compensate_for_lorentz_factor
 import compensate_for_NIOBIUM_atomic_form_factor
+import compile_multiple_summed_intensities
 
 import numpy as np
 from skimage import io
@@ -235,11 +236,11 @@ def run():
 
         make_simple_plot.run(
             gsqr_bins, intensity_integrated_along_phi[0], "c", "$|G^2|$", "Intensity $(arb.)$",
-            "Integrated intensity vs. $|G^2|$", "integrated_intensity_vs_phi.png", output_folder)
+            "Integrated intensity vs. $|G^2|$", "integrated_intensity_vs_gsqr.png", output_folder)
 
         make_simple_plot.run(
             gsqr_bins, intensity_summed_along_phi[0], "r", "$|G^2|$", "Intensity $(arb.)$", "Summed intensity vs. $|G^2|$",
-            "summed_intensity_vs_phi.png", output_folder)
+            "summed_intensity_vs_gsqr.png", output_folder)
 
         write_data_to_file.run("integrated_intensity_vs_gsqr.dat", gsqr_bins, intensity_integrated_along_phi, output_folder)
 
@@ -251,15 +252,23 @@ def run():
 
     output_folder = "output_all"
 
-    gsqr, intensity = compile_multiple_integrated_intensities.run(gsqr_bins, phi_bins, ip.image_filename)
+    gsqr, integrated_intensity = compile_multiple_integrated_intensities.run(gsqr_bins, phi_bins, ip.image_filename)
+
+    gsqr, summed_intensity = compile_multiple_summed_intensities.run(gsqr_bins, ip.image_filename)
 
     master_gsqr_phi_bins = compile_multiple_gsqr_vs_phi.run(all_gsqr_phi_bins)
 
     make_simple_plot.run(
-        gsqr, intensity, "c", "$|G^2|$", "Intensity $(arb.)$",
-        "Integrated intensity vs. $|G^2|$", "integrated_intensity_vs_phi.png", output_folder)
+        gsqr, integrated_intensity, "c", "$|G^2|$", "Intensity $(arb.)$",
+        "Integrated intensity vs. $|G^2|$", "integrated_intensity_vs_gsqr.png", output_folder)
 
-    write_data_to_file_type_2.run("integrated_intensity_vs_gsqr.dat", gsqr, intensity, output_folder)
+    make_simple_plot.run(
+        gsqr, summed_intensity, "c", "$|G^2|$", "Summed Intensity $(arb.)$",
+        "Summed intensity vs. $|G^2|$", "summed_intensity_vs_gsqr.png", output_folder)
+
+    write_data_to_file_type_2.run("integrated_intensity_vs_gsqr.dat", gsqr, integrated_intensity, output_folder)
+
+    write_data_to_file_type_2.run("summed_intensity_vs_gsqr.dat", gsqr, summed_intensity, output_folder)
 
     make_plot_from_array.run(master_gsqr_phi_bins, "phi_vs_gsqr.png", "viridis", "none", output_folder, False)
 
