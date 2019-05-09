@@ -1,21 +1,21 @@
 use_previous_pixel_loop = False
-image_filename = ["masked_PSL_plate_1_s10268_BBXRD.tif", "masked_PSL_plate_2_s10268_BBXRD.tif", "masked_PSL_plate_3_s10268_BBXRD.tif", "masked_PSL_plate_4_s10268_BBXRD.tif"] # "3x4_test_image_0_to_12_thru_columns.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
+image_filename = ["masked_PSL_plate_1_s10257_BBXRD.tif", "masked_PSL_plate_2_s10257_BBXRD.tif", "masked_PSL_plate_3_s10257_BBXRD.tif", "masked_PSL_plate_4_s10257_BBXRD.tif"] # "3x4_test_image_0_to_12_thru_columns.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
 
-source_position = [[50.0, 0.0, 49.8], [50.0, 0.0, 49.8], [50.0, 0.0, 49.8], [50.0, 0.0, 49.8]]  # In mm
-offset = [[0, 11.7, 180], [0, 15.5, 90], [0.2, 11.7, 0], [0, 12.0, 270]]  # X offset (mm), Y offset (mm), rotation (degrees)
+source_position = [[45.45194777, 0.0, 54.16752204], [45.45194777, 0.0, 54.16752204], [45.45194777, 0.0, 54.16752204], [45.45194777, 0.0, 54.16752204]]  # In mm
+offset = [[0.0, 11.7, 180], [0.2, 10.6, 90], [-0.1, 11.7, 0], [0.0, 12.0, 270]]  # X offset (mm), Y offset (mm), rotation (degrees)
 sample_normal = [[0.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 0.0, 1.0]]
 
 
-normal = [[0.0, 23.2682, 13.2961], [26.4333, 0.0, 9.7], [0.0, -22.7259, 12.4235], [-25.6, 0.0, 12.9]]  # The normal to the plane of the image plate with units mm.
+normal = [[-1.0, 23.9, 11.7], [21.08, 0.0, 13.7285], [-1.1, -23.8, 11.2], [-26.0, 1.0, 10.0]]  # The normal to the plane of the image plate with units mm.
 
 x_scale = [56, 56, 56, 56]  # In mm
 y_scale = [44, 44, 44, 44]  # In mm
 
-view_x = [[1.0, 0.0, 0.00], [0.0, -1.0, 0.00], [-1.0, 0.0, 0.00], [0.0, 1.0, 0.00]]  # "normalised"
-view_y = [[0.0, -0.5, 0.87], [-0.34, -0.0, 0.94], [0.0, 0.48, 0.88], [0.45, 0.0, 0.89]]  # "normalised"
+view_x = [[1.0, 0.0, 0.09], [0.0, -1.0, 0.00], [-1.00, 0.0, -0.10], [0.03, 1.0, -0.01]]  # "normalised"
+view_y = [[-0.08, -0.44, 0.89], [-0.55, -0.0, 0.84], [-0.09, 0.43, 0.90], [0.36, 0.0, 0.93]]  # "normalised"
 
 
-wavelength = 1.39  # In Angstroms
+wavelength = 1.3777558  # In Angstroms
 a_lattice = 3.3  # In Angstroms
 
 num_subpixels_height = 1
