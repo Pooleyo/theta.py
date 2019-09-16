@@ -32,13 +32,18 @@ correct_for_sample_attenuation = False
 
 correct_for_polarisation = False
 
+correct_for_lorentz_factor = False
+
+correct_for_atomic_form_factor = False
+
 gsqr_limit = [[3.0, 20.0], [3.0, 20.0], [3.0, 20.0], [3.0, 20.0]]
-phi_limit = [[-360.0, 360.0],[-360.0, 360.0], [-360.0, 360.0], [-360.0, 360.0]]
+phi_limit = [[-360.0, 360.0], [-360.0, 360.0], [-360.0, 360.0], [-360.0, 360.0]]
 
 num_gsqr_bins = 800
 num_phi_bins = 400
+minimum_pixels_per_bin = 0
+
+minimum_pixels_in_column = 0
 
 plot = True
 debug = False
-
-minimum_pixels_in_gsqr_bin = 500

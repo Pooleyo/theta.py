@@ -15,7 +15,7 @@ def run(working_pixel_value, height, width, bragg_angles_deg):
             # The correction factor below is inverted since we want to get the intensity as if this effect never
             # occurred.
 
-            correction_factor = np.sin(np.deg2rad(bragg_angles_deg[i][j]))
+            correction_factor = (1.0 + (np.cos(np.deg2rad(bragg_angles_deg[i][j]))**2)) / (np.sin(2 * np.deg2rad(bragg_angles_deg[i][j])) * np.sin(np.deg2rad(bragg_angles_deg[i][j])))
 
             new_pixel_value[i][j] = correction_factor * working_pixel_value[i][j]
 

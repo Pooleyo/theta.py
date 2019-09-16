@@ -2,8 +2,8 @@ use_previous_pixel_loop = False
 
 image_filename = ["3x4_test_image_0_to_12_thru_columns.tif"] # "3x4_pixel_value_1.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
 
-source_position = [[50.0,0.0,50.0]]  # In mm
-offset = [[0,0,0]]  # X offset (mm), Y offset (mm), rotation (degrees)
+source_position = [[50.0, 0.0, 50.0]]  # In mm
+offset = [[0.0, 0.0, 0.0]]  # X offset (mm), Y offset (mm), rotation (degrees)
 sample_normal = [[0.0, 0.0, 1.0]]
 
 
@@ -37,11 +37,14 @@ correct_for_lorentz_factor = False
 correct_for_atomic_form_factor = False
 
 gsqr_limit = [[0.0, 25.0]]
-phi_limit = [[-160.0, 160.0]]
+phi_limit = [[-180.0, 180.0]]
 
 num_gsqr_bins = 10
 num_phi_bins = 10
-minimum_pixels_in_gsqr_bin = 1
+minimum_pixels_per_bin = 1
+
+minimum_pixels_in_column = 3
+
 
 plot = True
 debug = False

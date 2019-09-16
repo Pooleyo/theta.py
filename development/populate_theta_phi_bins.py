@@ -1,4 +1,4 @@
-def run(working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter, working_pixel_value, subpixel_value, gsqr_limit, phi_limit):
+def run(working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_bins, gsqr_phi_bin_pixel_counter, working_pixel_value, subpixel_value, gsqr_limit, phi_limit, minimum_pixels_per_bin):
 
     import numpy as np   
 
@@ -50,9 +50,23 @@ def run(working_width, working_height, gsqr, phi, gsqr_bins, phi_bins, gsqr_phi_
 
                 gsqr_phi_bin_pixel_counter[bin_row, bin_col] += 1
 
+    # This statement eliminates any bins that don't meet the user-defined minimum population requirement.
+    accepted_bin_indices = np.nonzero(gsqr_phi_bin_pixel_counter >= minimum_pixels_per_bin)
+
+    filtered_bins = np.zeros(np.shape(gsqr_phi_bins))
+    filtered_bin_counter = np.zeros(np.shape(gsqr_phi_bins))
+
+    for i, row in enumerate(accepted_bin_indices[0]):
+
+        col = accepted_bin_indices[1][i]
+
+        filtered_bins[row, col] = gsqr_phi_bins[row, col]
+
+        filtered_bin_counter[row, col] = gsqr_phi_bin_pixel_counter[row, col]
+
     print "Dumped pixels = " + str(dumped_pixel_counter)
     print "Sorted pixels = " + str(np.sum(gsqr_phi_bin_pixel_counter))
     print "Total pixels processed = " + str(dumped_pixel_counter + np.sum(gsqr_phi_bin_pixel_counter))
     print "Total pixels in raw image = " + str(np.size(working_pixel_value))
 
-    return gsqr_phi_bins, gsqr_phi_bin_pixel_counter, dumped_pixel_counter
+    return filtered_bins, gsqr_phi_bin_pixel_counter, dumped_pixel_counter

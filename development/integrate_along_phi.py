@@ -1,4 +1,4 @@
-def run(gsqr_phi_bins, gsqr_phi_bin_pixel_counter, minimum_pixels_in_gsqr_bin):
+def run(gsqr_phi_bins, gsqr_phi_bin_pixel_counter, minimum_pixels_column):
 
     import numpy as np
 
@@ -22,12 +22,19 @@ def run(gsqr_phi_bins, gsqr_phi_bin_pixel_counter, minimum_pixels_in_gsqr_bin):
 
     for col in range(width):
 
-        if number_pixels_in_each_col[0, col] <= minimum_pixels_in_gsqr_bin:
+        # The below function returns a tuple containing a numpy array. The numpy array contains the indices of all the
+        # non-zero entries to the current column.
+
+        coords = np.nonzero(gsqr_phi_bin_pixel_counter[:, col])
+
+        num_occupied_bins = len(coords[0])
+
+        if number_pixels_in_each_col[0, col] <= minimum_pixels_column:
 
             intensity_integrated_across_phi[0, col] = 0.0
 
         else:
 
-            intensity_integrated_across_phi[0, col] = intensity_summed_across_phi[0, col] / number_pixels_in_each_col[0, col]
+            intensity_integrated_across_phi[0, col] = intensity_summed_across_phi[0, col] / num_occupied_bins
 
     return intensity_integrated_across_phi, intensity_summed_across_phi
