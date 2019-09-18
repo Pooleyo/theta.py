@@ -1,5 +1,5 @@
-use_previous_pixel_loop = False
-image_filename = ["masked_PSL_plate_1_s10268_BBXRD.tif", "masked_PSL_plate_2_s10268_BBXRD.tif", "masked_PSL_plate_3_s10268_BBXRD.tif", "masked_PSL_plate_4_s10268_BBXRD.tif"] # "3x4_test_image_0_to_12_thru_columns.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
+use_previous_pixel_loop = True
+image_filename = ["s10277_BBXRD_PSL_plate1_masked.tif", "s10277_BBXRD_PSL_plate2_masked.tif", "s10277_BBXRD_PSL_plate3_masked.tif", "s10277_BBXRD_PSL_plate4_masked.tif"] # "3x4_test_image_0_to_12_thru_columns.tif" "s10260_PSL_forward_scatter_plate.tif" #"PSL_plate_4_s10268_BBXRD.tif" #"test_forward_scatter.tif"
 
 source_position = [[45.45194777, 0.0, 54.16752204], [45.45194777, 0.0, 54.16752204], [45.45194777, 0.0, 54.16752204], [45.45194777, 0.0, 54.16752204]]  # In mm
 offset = [[0.0, 12.0, 180], [0.2, 13.7, 90], [0.0, 11.7, 0], [-0.4, 11.0, 270]]  # X offset (mm), Y offset (mm), rotation (degrees)
@@ -29,13 +29,11 @@ filter_attenuation_length_at_90_deg = [20.8513, 20.8513, 20.8513, 20.8513]  # [3
 
 correct_for_sample_attenuation = True
 
-correct_for_polarisation = True
-
-correct_for_lorentz_factor = True
+correct_for_lorentz_polarisation_factor = True
 
 correct_for_atomic_form_factor = True
 
-gsqr_limit = [[6.0, 23.0], [6.0, 23.0], [6.0, 23.0], [6.0, 23.0]]
+gsqr_limit = [[5.0, 13.0], [5.0, 13.0], [5.0, 13.0], [5.0, 13.0]]
 phi_limit = [[-180.0, 180.0], [-180.0, 180.0], [-180.0, 180.0], [-180.0, 180.0]]
 
 num_gsqr_bins = 500

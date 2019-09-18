@@ -50,6 +50,6 @@ def run(working_pixel_value, sample_normal, source, vector_origin_to_pixels):
 
                 if sample_correction_factor[i][j] < 0.0:
 
-                    print "#### WARNING: NEGATIVE CORRECTION FACTOR ####"
+                    print "#### WARNING: NEGATIVE SAMPLE ATTENUATION CORRECTION FACTOR ####"
 
     return corrected_pixel_value, sample_correction_factor

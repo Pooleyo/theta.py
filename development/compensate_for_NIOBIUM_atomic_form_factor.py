@@ -49,6 +49,6 @@ def run(working_pixel_value, working_height, working_width, bragg_angle, output_
 
             if correction_factor < 0.0:
 
-                print "#### WARNING: NEGATIVE CORRECTION FACTOR ####"
+                print "#### WARNING: NEGATIVE ATOMIC FORM FACTOR CORRECTION FACTOR ####"
 
     return new_pixel_value, atomic_form_factor_correction
